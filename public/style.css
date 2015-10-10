@@ -1,0 +1,30 @@
+html{
+  background-color: #D02C31;
+  color: #fff;
+  font-family: 'Roboto Condensed', sans-serif;
+}
+h1.header{
+  text-align: center;
+  display: inline-block;
+  padding: 10px;
+  border: 1px solid;
+  margin: 0;
+}
+.main-menu{
+  width: 500px;
+  height: 180px;
+  padding: 10px;
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -250px;
+  margin-top: -90px;
+  text-align: center;
+  background-color: #fff;
+  color: #E80207;
+  border-radius: 8px;
+}
+.main-menu h1{
+  margin-top: 5px;
+}

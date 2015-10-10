@@ -1,0 +1,58 @@
+<!-- This is the user's controller -->
+
+<!doctype html>
+<html>
+  <head>
+    <title>Tinder Game</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mobile.css">
+  </head>
+  <body>
+
+    <div class="container">
+      <div class="row hair">
+        <button class="left"><</button>
+        <div class="img">
+          <img src="img/char/hair/short-01.png" alt="">
+        </div>
+        <button class="right">></button>
+      </div>
+      <div class="row brows">
+        <button class="left"><</button>
+        <div class="img"></div>
+        <button class="right">></button>
+      </div>
+      <div class="row eyes">
+        <button class="left"><</button>
+        <div class="img"></div>
+        <button class="right">></button>
+      </div>
+      <div class="row nose">
+        <button class="left"><</button>
+        <div class="img"></div>
+        <button class="right">></button>
+      </div>
+      <div class="row mouth">
+        <button class="left"><</button>
+        <div class="img"></div>
+        <button class="right">></button>
+      </div>
+    </div>
+
+    <input type="text" value="Name">
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io();
+
+      // get player count
+
+      socket.on('players', function getPlayers(data){
+        $('.player-count').html(data);
+      });
+
+    </script>
+  </body>
+</html>

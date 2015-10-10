@@ -1,0 +1,49 @@
+input{
+  width: 100%;
+  max-width: 800px;
+  height: 50px;
+  font-size: 24px;
+  box-sizing: border-box;
+  padding: 10px;
+  margin: 0 auto;
+  display: block;
+}
+.container{
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 40px;
+  box-sizing: border-box;
+}
+
+.container .row{
+  min-height: 40px;
+  margin: 10px;
+  position: relative;
+}
+.container .row button{
+  height: 40px;
+  width: 40px;
+}
+.container .row .left{
+  float: left;
+}
+
+.container .row .right{
+  float: right;
+}
+.container .row .img{
+  margin: 0 auto;
+  width: 100px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  margin-left: -50px;
+}
+.container .row .img img{
+  max-height: 50px;
+  width: auto;
+}
