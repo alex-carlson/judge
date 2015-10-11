@@ -7,6 +7,8 @@ input{
   padding: 10px;
   margin: 0 auto;
   display: block;
+  border-radius: 10px;
+  border: 0;
 }
 .container{
   width: 100%;
@@ -15,8 +17,9 @@ input{
   background: #fff;
   border-radius: 10px;
   padding: 10px;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   box-sizing: border-box;
+  min-height: 350px;
 }
 
 .container .row{
@@ -37,13 +40,31 @@ input{
 }
 .container .row .img{
   margin: 0 auto;
-  width: 100px;
+  width: 250px;
   position: absolute;
-  top: 0;
+  top: 20px;
   left: 50%;
-  margin-left: -50px;
+  margin-left: -125px;
 }
 .container .row .img img{
-  max-height: 50px;
-  width: auto;
+  width: 100%;
+}
+.container .row.head .img{
+  top: -10px;
+  z-index: 10;
+}
+.container .row.hair .img{
+  z-index: 12;
+}
+.container .row.eyes .img{
+  top: -80px;
+  z-index: 10;
+}
+.container .row.nose .img{
+  top: -125px;
+  z-index: 10;
+}
+.container .row.mouth .img{
+  top: -160px;
+  z-index: 10;
 }

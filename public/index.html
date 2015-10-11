@@ -18,40 +18,191 @@
         </div>
         <button class="right">></button>
       </div>
-      <div class="row brows">
+      <div class="row head">
         <button class="left"><</button>
-        <div class="img"></div>
+        <div class="img">
+          <img src="img/char/head/head-01.png" alt="">
+        </div>
         <button class="right">></button>
       </div>
       <div class="row eyes">
         <button class="left"><</button>
-        <div class="img"></div>
+        <div class="img">
+          <img src="img/char/eyes/eyes-01.png" alt="">
+        </div>
         <button class="right">></button>
       </div>
       <div class="row nose">
         <button class="left"><</button>
-        <div class="img"></div>
+        <div class="img">
+          <img src="img/char/nose/nose-01.png" alt="">
+        </div>
         <button class="right">></button>
       </div>
       <div class="row mouth">
         <button class="left"><</button>
-        <div class="img"></div>
+        <div class="img">
+          <img src="img/char/mouth/mouth-01.png" alt="">
+        </div>
         <button class="right">></button>
       </div>
     </div>
 
-    <input type="text" value="Name">
+    <input type="text" placeholder="Name">
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io();
 
+      var hair = [
+          "short-01.png", 
+          "short-02.png", 
+          "short-03.png",
+          "short-04.png",
+          "short2-01.png",
+          "short2-02.png",
+          "short2-03.png",
+          "short2-04.png"
+          ],
+          hairI = 0;
+
+      var head = [
+          "head-01.png",
+          "head-02.png",
+          "head-03.png"
+          ],
+          headI = 0;
+
+      var eyes = [
+          "eyes-01.png",
+          "eyes-02.png"
+          ],
+          eyesI = 0;
+
+      var nose = [
+          "nose-01.png",
+          "nose-02.png",
+          "nose-03.png",
+          ],
+          noseI = 0;
+
+      var mouth = [
+          "mouth-01.png",
+          "mouth-02.png",
+          "mouth-03.png"
+          ],
+          mouthI = 0;
+
       // get player count
 
       socket.on('players', function getPlayers(data){
         $('.player-count').html(data);
       });
+
+      // hair stuff
+
+      $('.container .row.hair button.right').click(function(){
+        if(hairI < hair.length-1){
+          hairI++;
+        } else {
+          hairI = 0;
+        }
+        $(this).siblings('.img').children('img').attr('src', 'img/char/hair/'+hair[hairI]);
+      })
+
+      $('.container .row.hair button.left').click(function(){
+        if(hairI > 0){
+          hairI--;
+        } else {
+          hairI = hair.length-1;
+        }
+        $(this).siblings('.img').children('img').attr('src', 'img/char/hair/'+hair[hairI]);
+      })
+
+
+      // head stuff
+
+      $('.container .row.head button.right').click(function(){
+        if(headI < head.length-1){
+          headI++;
+        } else {
+          headI = 0;
+        }
+        $(this).siblings('.img').children('img').attr('src', 'img/char/head/'+head[headI]);
+      })
+
+      $('.container .row.head button.left').click(function(){
+        if(headI > 0){
+          headI--;
+        } else {
+          headI = head.length-1;
+        }
+        $(this).siblings('.img').children('img').attr('src', 'img/char/head/'+head[headI]);
+      })
+
+
+
+      // eyes stuff
+
+      $('.container .row.eyes button.right').click(function(){
+        if(eyesI < eyes.length-1){
+          eyesI++;
+        } else {
+          eyesI = 0;
+        }
+        $(this).siblings('.img').children('img').attr('src', 'img/char/eyes/'+eyes[eyesI]);
+      })
+
+      $('.container .row.eyes button.left').click(function(){
+        if(eyesI > 0){
+          eyesI--;
+        } else {
+          eyesI = eyes.length-1;
+        }
+        $(this).siblings('.img').children('img').attr('src', 'img/char/eyes/'+eyes[eyesI]);
+      })
+
+
+      // nose stuff
+
+      $('.container .row.nose button.right').click(function(){
+        if(noseI < nose.length-1){
+          noseI++;
+        } else {
+          noseI = 0;
+        }
+        $(this).siblings('.img').children('img').attr('src', 'img/char/nose/'+nose[noseI]);
+      })
+
+      $('.container .row.nose button.left').click(function(){
+        if(noseI > 0){
+          noseI--;
+        } else {
+          noseI = nose.length-1;
+        }
+        $(this).siblings('.img').children('img').attr('src', 'img/char/nose/'+nose[noseI]);
+      })
+
+      // mouth stuff
+
+      $('.container .row.mouth button.right').click(function(){
+        if(mouthI < mouth.length-1){
+          mouthI++;
+        } else {
+          mouthI = 0;
+        }
+        $(this).siblings('.img').children('img').attr('src', 'img/char/mouth/'+mouth[mouthI]);
+      })
+
+      $('.container .row.mouth button.left').click(function(){
+        if(mouthI > 0){
+          mouthI--;
+        } else {
+          mouthI = mouth.length-1;
+        }
+        $(this).siblings('.img').children('img').attr('src', 'img/char/mouth/'+mouth[mouthI]);
+      })
 
     </script>
   </body>
