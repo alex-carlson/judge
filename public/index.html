@@ -3,7 +3,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Tinder Game</title>
+    <title>Client</title>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="mobile.css">
@@ -12,43 +12,45 @@
 
     <div class="container">
       <div class="row hair">
-        <button class="left"><</button>
+        <button class="left"><<br>Hair</button>
         <div class="img">
-          <img src="img/char/hair/short-01.png" alt="">
+          <img src="img/char/hair/hair-01.png" alt="">
         </div>
-        <button class="right">></button>
+        <button class="right">><br>Hair</button>
       </div>
       <div class="row head">
-        <button class="left"><</button>
+        <button class="left"><<br>Head</button>
         <div class="img">
           <img src="img/char/head/head-01.png" alt="">
         </div>
-        <button class="right">></button>
+        <button class="right">><br>Head</button>
       </div>
       <div class="row eyes">
-        <button class="left"><</button>
+        <button class="left"><<br>Eyes</button>
         <div class="img">
           <img src="img/char/eyes/eyes-01.png" alt="">
         </div>
-        <button class="right">></button>
+        <button class="right">><br>Eyes</button>
       </div>
       <div class="row nose">
-        <button class="left"><</button>
+        <button class="left"><<br>Nose</button>
         <div class="img">
           <img src="img/char/nose/nose-01.png" alt="">
         </div>
-        <button class="right">></button>
+        <button class="right">><br>Nose</button>
       </div>
       <div class="row mouth">
-        <button class="left"><</button>
+        <button class="left"><<br>Mouth</button>
         <div class="img">
           <img src="img/char/mouth/mouth-01.png" alt="">
         </div>
-        <button class="right">></button>
+        <button class="right">><br>Mouth</button>
       </div>
     </div>
 
-    <input type="text" placeholder="Name">
+    <input type="text" class="name" placeholder="Name">
+    <div class="errorHandler"></div>
+    <button class="sendData">Submit</button>
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
@@ -56,27 +58,49 @@
       var socket = io();
 
       var hair = [
-          "short-01.png", 
-          "short-02.png", 
-          "short-03.png",
-          "short-04.png",
-          "short2-01.png",
-          "short2-02.png",
-          "short2-03.png",
-          "short2-04.png"
+          "hair-01.png",
+          "hair-02.png",
+          "hair-03.png",
+          "hair-04.png",
+          "hair-05.png",
+          "hair-06.png",
+          "hair-07.png",
+          "hair-08.png",
+          "hair-09.png",
+          "hair-10.png",
+          "hair-11.png",
+          "hair-12.png",
+          "hair-13.png",
+          "hair-14.png",
+          "hair-15.png"
           ],
           hairI = 0;
 
       var head = [
           "head-01.png",
           "head-02.png",
-          "head-03.png"
+          "head-03.png",
+          "head-04.png",
+          "head-05.png",
+          "head-06.png",
+          "head-07.png",
+          "head-08.png",
+          "head-09.png",
+          "head-10.png",
+          "head-11.png",
+          "head-12.png",
+          "head-13.png",
+          "head-14.png",
+          "head-15.png"
           ],
           headI = 0;
 
       var eyes = [
           "eyes-01.png",
-          "eyes-02.png"
+          "eyes-02.png",
+          "eyes-03.png",
+          "eyes-04.png",
+          "eyes-05.png"
           ],
           eyesI = 0;
 
@@ -84,13 +108,17 @@
           "nose-01.png",
           "nose-02.png",
           "nose-03.png",
+          "nose-04.png",
+          "nose-05.png",
           ],
           noseI = 0;
 
       var mouth = [
           "mouth-01.png",
           "mouth-02.png",
-          "mouth-03.png"
+          "mouth-03.png",
+          "mouth-04.png",
+          "mouth-05.png"
           ],
           mouthI = 0;
 
@@ -99,6 +127,27 @@
       socket.on('players', function getPlayers(data){
         $('.player-count').html(data);
       });
+
+      // send player data
+
+      $('.sendData').click(function(){
+
+        var character = [
+          $('.hair .img img').attr('src'),
+          $('.head .img img').attr('src'),
+          $('.eyes .img img').attr('src'),
+          $('.nose .img img').attr('src'),
+          $('.mouth .img img').attr('src'),
+          $('.name').val()
+        ];
+
+        if($('.name').val == "" || $('.name').val == "Name"){
+          $('.errorHandler').text('You didn\'t give your avatar a name!');
+        } else {
+          $('.errorHandler').text('');
+          socket.emit('submitPlayer', character);
+        }
+      })
 
       // hair stuff
 

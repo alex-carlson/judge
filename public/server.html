@@ -9,13 +9,13 @@
   </head>
   <body>
 
-  <h1 class="header">Judge</h1>
+  <!-- <h1 class="header">Hello World</h1> -->
 
     <!-- main menu screen -->
     <section class="main-menu">
       <h1>Welcome!</h1>
       <h2><span class="player-count"></span> player(s) connected</h2>
-      <p>All connected players must press "OK!" to continue</p>
+      <p>Waiting for all players to create their avatar...</p>
       <p><span class="readyplayers">0</span>/<span class="player-count">0</span></p>
     </section>
 
@@ -39,12 +39,34 @@
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io();
+      var myPlayers;
 
       // get player count
 
       socket.on('players', function getPlayers(data){
         data--;
         $('.player-count').html(data);
+      })
+
+      socket.on('playerList', function (data){
+        myPlayers = data;
+
+        $('.roster').html(renderPlayers(data));
+
+        function renderPlayers(r){
+          var p = [];
+          for(i = 0; i < r.length; i++){
+            p.push('<div class="avatar">'+
+            '<img src="'+r[i][0]+'"/>'+
+            '<img src="'+r[i][1]+'"/>'+
+            '<img src="'+r[i][2]+'"/>'+
+            '<img src="'+r[i][3]+'"/>'+
+            '<img src="'+r[i][4]+'"/>'+
+            '<span>'+r[i][5]+'</span>'+
+            '</div>');
+          }
+          return p;
+        }
       })
 
     </script>

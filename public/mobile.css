@@ -1,4 +1,4 @@
-input{
+input, .sendData{
   width: 100%;
   max-width: 800px;
   height: 50px;
@@ -7,7 +7,6 @@ input{
   padding: 10px;
   margin: 0 auto;
   display: block;
-  border-radius: 10px;
   border: 0;
 }
 .container{
@@ -15,7 +14,6 @@ input{
   max-width: 800px;
   margin: 0 auto;
   background: #fff;
-  border-radius: 10px;
   padding: 10px;
   margin-bottom: 10px;
   box-sizing: border-box;
@@ -28,8 +26,11 @@ input{
   position: relative;
 }
 .container .row button{
-  height: 40px;
-  width: 40px;
+  height: 45px;
+  width: 65px;
+  background: #D02C31;
+  color: #fff;
+  border: 0;
 }
 .container .row .left{
   float: left;
@@ -67,4 +68,8 @@ input{
 .container .row.mouth .img{
   top: -160px;
   z-index: 10;
+}
+.sendData{
+  margin-top: 10px;
+  background-color: #fff;
 }
