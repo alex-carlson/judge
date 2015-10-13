@@ -13,10 +13,16 @@ app.use(express.static('public')); //use express in static mode to look into the
 io.on('connection', function(socket){
   io.emit('players', io.sockets.sockets.length);
 
+  var socketId = socket.id;
+  var clientIp = socket.request.connection.remoteAddress;
+
+  console.log(clientIp);
+  
+
   socket.on('submitPlayer', function (data) {
-    createdPlayers.push(data);
-    console.log("playerCount: "+createdPlayers.length);
+
     io.emit('playerList', createdPlayers);
+
   });
   
   socket.on('disconnect', function(){
