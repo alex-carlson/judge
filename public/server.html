@@ -30,27 +30,6 @@
         $('.player-count').html(data);
       })
 
-      socket.on('playerList', function (data){
-        myPlayers = data;
-
-        $('.roster').html(renderPlayers(data));
-
-        function renderPlayers(r){
-          var p = [];
-          for(i = 0; i < r.length; i++){
-            p.push('<div class="avatar">'+
-            '<img src="'+r[i][0]+'"/>'+
-            '<img src="'+r[i][1]+'"/>'+
-            '<img src="'+r[i][2]+'"/>'+
-            '<img src="'+r[i][3]+'"/>'+
-            '<img src="'+r[i][4]+'"/>'+
-            '<span>'+r[i][5]+'</span>'+
-            '</div>');
-          }
-          return p;
-        }
-      })
-
     </script>
   </body>
 </html>

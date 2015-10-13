@@ -4,26 +4,12 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var bp = require('body-parser');
 
-var createdPlayers = [];
-
 app.use(bp.urlencoded({ extended:false })) //some garbage to enable parsing of the body
 app.use(bp.json()) // enable parsing of JSON files
 app.use(express.static('public')); //use express in static mode to look into the 'public' folder for files (.html, .jpg, .css, etc.)
 
 io.on('connection', function(socket){
   io.emit('players', io.sockets.sockets.length);
-
-  var socketId = socket.id;
-  var clientIp = socket.request.connection.remoteAddress;
-
-  console.log(clientIp);
-  
-
-  socket.on('submitPlayer', function (data) {
-
-    io.emit('playerList', createdPlayers);
-
-  });
   
   socket.on('disconnect', function(){
     io.emit('players', io.sockets.sockets.length);

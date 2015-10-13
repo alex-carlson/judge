@@ -19,57 +19,12 @@ input, .sendData{
   box-sizing: border-box;
   min-height: 350px;
 }
-
-.container .row{
-  min-height: 40px;
-  margin: 10px;
-  position: relative;
-}
-.container .row button{
-  height: 45px;
-  width: 65px;
-  background: #D02C31;
-  color: #fff;
-  border: 0;
-}
-.container .row .left{
-  float: left;
-}
-
-.container .row .right{
-  float: right;
-}
-.container .row .img{
-  margin: 0 auto;
-  width: 250px;
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  margin-left: -125px;
-}
-.container .row .img img{
-  width: 100%;
-}
-.container .row.head .img{
-  top: -10px;
-  z-index: 10;
-}
-.container .row.hair .img{
-  z-index: 12;
-}
-.container .row.eyes .img{
-  top: -80px;
-  z-index: 10;
-}
-.container .row.nose .img{
-  top: -125px;
-  z-index: 10;
-}
-.container .row.mouth .img{
-  top: -160px;
-  z-index: 10;
-}
 .sendData{
   margin-top: 10px;
   background-color: #fff;
+}
+.container canvas{
+  background: #000;
+  width: 100%;
+  height: 100%;
 }
