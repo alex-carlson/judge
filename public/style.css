@@ -1,72 +1,22 @@
-html{
-  background-color: #D02C31;
-  color: #fff;
-  font-family: 'Roboto Condensed', sans-serif;
-}
-h1.header{
-  text-align: center;
-  display: inline-block;
-  padding: 10px;
-  border: 1px solid;
-  margin: 0;
-}
-.main-menu{
-  width: 500px;
-  height: 180px;
-  padding: 10px;
-  box-sizing: border-box;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin-left: -250px;
-  margin-top: -90px;
-  text-align: center;
-  background-color: #fff;
-  color: #E80207;
-  border-radius: 8px;
-}
-.main-menu h1{
-  margin-top: 5px;
-}
-
-.roster{
+canvas{
+  //background: #000;
+  width: 250px;
+  height: 250px;
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-left: -400px;
-  margin-top: 130px;
-  max-width: 800px;
-  width: 100%;
+  margin-left: -125px;
+  margin-top: -125px;
+  border: solid 1px #000;
 }
-.roster .avatar{
-  width: 196px;
-  height: 196px;
-  float: left;
-  background: #fff;
-  position: relative;
-  padding: 20px;
-  box-sizing: border-box;
-  margin: 2px;
-}
-
-.roster .avatar img{
+#submit{
   position: absolute;
-  top: 10px;
-  left: 40px;
-  max-width: 130px;
-  max-height: 130px;
-  height: auto;
-}
-
-.roster .avatar span{
-  position: absolute;
-  bottom: 20px;
+  bottom: 0;
   left: 0;
   width: 100%;
-  text-align: center;
-  color: #D02C31;
+  height: 50px;
 }
 
-.roster .avatar img:first-child{
-  z-index: 1;
+.hidden{
+  display: none;
 }

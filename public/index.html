@@ -6,50 +6,82 @@
     <title>Client</title>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="mobile.css">
   </head>
   <body>
 
-    <div class="container">
-      <script src="https://github.com/processing/p5.js/releases/download/0.4.12/p5.min.js"></script>
-      <script>
-        var c;
+    <section class="welcome">
+      <h1>welcome!  press join to join the game</h1>
+      <button id="join">
+        join
+      </button>
+    </section>
 
-        function setup(){
-          createCanvas(windowWidth, windowHeight);
-          background(0);
-          noStroke();
-        }
+    <section class="draw">
+      <h1>drawings recieved: <span class="recieved">0</span>/<span class="playercount">0</span></h1>
+      <canvas id="myCanvas" resize></canvas>
+      <button id="submit">submit your drawing</button>
+    </section>
 
-        function mouseMoved(){
-          c = map(mouseX, 0, width, 0, 255);
-          var sx = mouseX - pmouseX,
-              sy = mouseY - pmouseY,
-              sz = sx + sy,
-              size = map(sz, 0, width, 5, 300);
-          colorMode(HSB);
-          fill(c, 255, 255);
-          ellipse(mouseX, mouseY, size, size);
-        }
+    <section class="wait">
+      <h1>waiting for everyone to submit a drawing...</h1>
+      <p>drawings recieved: <span class="recieved">0</span>/<span class="playercount">0</span></p>
+    </section>
 
-        function mousePressed(){
-          background(0);
-        }
-      </script>
-    </div>
-    <button class="sendData">Submit</button>
+    <section class="vote">
+      <h1>pick the best drawing!</h1>
+      <div class="col half" id="left"></div>
+      <div class="col half" id="right"></div>
+    </section>
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io();
+      var players, drawings;
 
       // send player data
 
-      $('.sendData').click(function(){
+      $('section').fadeOut();
+      $('.welcome').fadeIn(1000);
 
+      $('#join').click(function(){
+        $('section').fadeOut(500);
+        $('.draw').fadeIn(500);
       })
 
+      socket.on('drawingCount', function(data){
+        $('.recieved').html(data);
+        drawings = data;
+
+        if(drawings == players && players > 0){
+          $('.wait').fadeOut(500);
+          $('.vote').fadeIn(500);
+          getDrawings();
+        }
+      })
+
+      socket.on('players', function(data){
+        $('.playercount').html(data);
+        players = data;
+
+        if(drawings == players && players > 0){
+          $('.wait').fadeOut(500);
+          $('.vote').fadeIn(500);
+          getDrawings();
+        }
+      })
+
+      // logic for getting new images to vote on
+
+      function getDrawings(){
+        $('#left').html('left image');
+        $('#right').html('right image');
+      }
+
     </script>
+    <!-- Load the Paper.js library -->
+    <script type="text/javascript" src="paper-full.min.js"></script>
+    <!-- Define inlined PaperScript associate it with myCanvas -->
+    <script type="text/paperscript" src="drawing.js" canvas="myCanvas"></script>
   </body>
 </html>
