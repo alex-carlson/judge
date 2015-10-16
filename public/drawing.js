@@ -21,6 +21,7 @@ function drawCircle( x, y, radius, color ) {
 function emitCircle( x, y, radius, color ) {
   
     var data = {
+        user: uniqueID,
         x: x,
         y: y,
         radius: radius,

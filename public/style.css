@@ -9,6 +9,12 @@ canvas{
   margin-top: -125px;
   border: solid 1px #000;
 }
+.col.half{
+  width: 50%;
+  float: left;
+  position: relative;
+  height: 250px;
+}
 #submit{
   position: absolute;
   bottom: 0;

@@ -29,15 +29,19 @@
 
     <section class="vote">
       <h1>pick the best drawing!</h1>
-      <div class="col half" id="left"></div>
-      <div class="col half" id="right"></div>
+      <div class="col half" id="left">
+        <canvas id="leftCanvas"></canvas>
+      </div>
+      <div class="col half" id="right">
+        <canvas id="rightCanvas"></canvas>
+      </div>
     </section>
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       var socket = io();
-      var players, drawings;
+      var players, drawings, uniqueID;
 
       // send player data
 
@@ -60,9 +64,10 @@
         }
       })
 
-      socket.on('players', function(data){
+      socket.on('players', function(data, myID){
         $('.playercount').html(data);
         players = data;
+        uniqueID = myID;
 
         if(drawings == players && players > 0){
           $('.wait').fadeOut(500);
@@ -71,17 +76,14 @@
         }
       })
 
-      // logic for getting new images to vote on
-
-      function getDrawings(){
-        $('#left').html('left image');
-        $('#right').html('right image');
-      }
+      //socket.on('loadImage', getImage(img1, img2));
 
     </script>
     <!-- Load the Paper.js library -->
     <script type="text/javascript" src="paper-full.min.js"></script>
     <!-- Define inlined PaperScript associate it with myCanvas -->
     <script type="text/paperscript" src="drawing.js" canvas="myCanvas"></script>
+    <script type="text/paperscript" src="leftcanvas.js" canvas="leftCanvas"></script>
+    <script type="text/paperscript" src="rightcanvas.js" canvas="rightCanvas"></script>
   </body>
 </html>
