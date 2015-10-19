@@ -5,6 +5,7 @@ var io = require('socket.io')(http);
 var bp = require('body-parser');
 
 var submittedDrawings = 0;
+var playerCount = io.sockets.sockets.length;
 var drawingData = [];
 var playerIPs = [];
 
@@ -13,14 +14,15 @@ app.use(bp.json()) // enable parsing of JSON files
 app.use(express.static('public')); //use express in static mode to look into the 'public' folder for files (.html, .jpg, .css, etc.)
 
 io.on('connection', function(socket){
+  playerCount++;
   var playerID = socket.handshake.address;
   playerIPs.push(playerID);
-  io.emit('players', io.sockets.sockets.length, playerID);
+  io.emit('players', playerCount, playerID);
   socket.emit('drawingCount', submittedDrawings);
   
   socket.on('disconnect', function(){
-    submittedDrawings--;
-    io.emit('players', io.sockets.sockets.length);
+    playerCount--;
+    io.emit('players', playerCount);
     socket.emit('drawingCount', submittedDrawings);
   });
 
@@ -28,19 +30,9 @@ io.on('connection', function(socket){
     // socket.broadcast.emit( 'drawCircle', data );
     submittedDrawings++;
     drawingData.push(data);
-    console.log(data);
     socket.emit('drawingCount', submittedDrawings);
   })
 
-  socket.on( 'sendImage', function (data){
-    var img1 = Math.floor((Math.random() * submittedDrawings.length) + 1);
-    var img2 = Math.floor((Math.random() * submittedDrawings.length) + 1);
-
-    if(img1 == img2){
-      img2 = Math.floor((Math.random() * submittedDrawings.length) + 1);
-    }
-    socket.emit('loadImage', data);
-  } )
 });
 
 http.listen(3000, function(){

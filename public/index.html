@@ -1,13 +1,17 @@
-<!-- This is the user's controller -->
-
 <!doctype html>
 <html>
   <head>
     <title>Client</title>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="style.css">
+    <!-- Load the Paper.js library -->
+    <script type="text/javascript" src="paper-full.min.js"></script>
+    <!-- Define inlined PaperScript associate it with myCanvas -->
+    <script type="text/paperscript" src="drawing.js" canvas="myCanvas"></script>
   </head>
   <body>
+
+
 
     <section class="welcome">
       <h1>welcome!  press join to join the game</h1>
@@ -30,9 +34,11 @@
     <section class="vote">
       <h1>pick the best drawing!</h1>
       <div class="col half" id="left">
+        <h2 class="leftplayer"></h2>
         <canvas id="leftCanvas"></canvas>
       </div>
       <div class="col half" id="right">
+        <h2 class="rightplayer"></h2>
         <canvas id="rightCanvas"></canvas>
       </div>
     </section>
@@ -43,46 +49,73 @@
       var socket = io();
       var players, drawings, uniqueID;
 
-      // send player data
+      // load game
 
       $('section').fadeOut();
       $('.welcome').fadeIn(1000);
+
+      // join the game
 
       $('#join').click(function(){
         $('section').fadeOut(500);
         $('.draw').fadeIn(500);
       })
 
+      // the submit drawing logic is in drawing.js.  It's gross but I haven't figured out a good workaround yet...
+
+      // when we get a new drawing from a player
+
       socket.on('drawingCount', function(data){
         $('.recieved').html(data);
         drawings = data;
-
-        if(drawings == players && players > 0){
-          $('.wait').fadeOut(500);
-          $('.vote').fadeIn(500);
-          getDrawings();
-        }
+        // on submit drawing
+        socket.emit('sendImage', data);
+        startPlaying();
       })
+
+      // when a new player connects
 
       socket.on('players', function(data, myID){
         $('.playercount').html(data);
         players = data;
         uniqueID = myID;
+        startPlaying();
+      })
 
-        if(drawings == players && players > 0){
+      function startPlaying(){
+
+        // if not enough players
+
+        if(drawings == players && players < 2){
+          $('.wait h1').html('waiting for more players...');
+        }
+
+        //we're ready to start juding!
+
+        if(drawings == players && players > 1){
+          getDrawings();
           $('.wait').fadeOut(500);
           $('.vote').fadeIn(500);
-          getDrawings();
         }
-      })
+
+      }
+
+      function getDrawings(){
+        var img1 = Math.floor((Math.random() * drawings) + 1);
+        var img2 = Math.floor((Math.random() * drawings) + 1);
+
+        if(img1 == img2){
+          getDrawings();
+        } else {
+          console.log(img1, img2);
+          $('.leftplayer').html(img1);
+          $('.rightplayer').html(img2);
+        }
+      }
 
       //socket.on('loadImage', getImage(img1, img2));
 
     </script>
-    <!-- Load the Paper.js library -->
-    <script type="text/javascript" src="paper-full.min.js"></script>
-    <!-- Define inlined PaperScript associate it with myCanvas -->
-    <script type="text/paperscript" src="drawing.js" canvas="myCanvas"></script>
     <script type="text/paperscript" src="leftcanvas.js" canvas="leftCanvas"></script>
     <script type="text/paperscript" src="rightcanvas.js" canvas="rightCanvas"></script>
   </body>

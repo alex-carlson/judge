@@ -32,9 +32,11 @@ function emitCircle( x, y, radius, color ) {
 
 }
 
+// on submit drawing
+
 $('#submit').click(function(){
-  socket.emit('sendPicture', myPicture);
-  $('.draw').fadeOut(500);
-  $('.wait').fadeIn(500);
-  //console.log(myPicture);
+    socket.emit('sendPicture', myPicture);
+    $('.draw').fadeOut(500);
+    $('.wait').fadeIn(500);
+    //console.log(myPicture);
 })
