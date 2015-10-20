@@ -15,10 +15,13 @@ app.use(express.static('public')); //use express in static mode to look into the
 
 io.on('connection', function(socket){
   playerCount++;
-  var playerID = socket.handshake.address;
-  playerIPs.push(playerID);
-  io.emit('players', playerCount, playerID);
-  socket.emit('drawingCount', submittedDrawings);
+  io.emit('players', playerCount);
+  io.emit('drawingCount', submittedDrawings);
+
+  socket.on('uniqueID', function(data){
+    playerIPs.push(data);
+    console.log(playerIPs);
+  })
   
   socket.on('disconnect', function(){
     playerCount--;
@@ -31,6 +34,11 @@ io.on('connection', function(socket){
     submittedDrawings++;
     drawingData.push(data);
     socket.emit('drawingCount', submittedDrawings);
+  })
+
+  socket.on( 'sendPickedImages', function(img1, img2){
+    var data = drawingData;
+    socket.emit('sendImageJson', data);
   })
 
 });

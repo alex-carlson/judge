@@ -1,7 +1,7 @@
 function getImage(img1, img2){
-  var x = img1.x;
-  var y = img1.y;
-  var radius = img1.radius;
-  var color = img1.color;
+  var x = img1.drawing.x;
+  var y = img1.drawing.y;
+  var radius = img1.drawing.radius;
+  var color = img1.drawing.color;
   drawCircle( x, y, radius, color );
 }

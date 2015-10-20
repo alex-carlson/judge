@@ -32,33 +32,47 @@
     </section>
 
     <section class="vote">
-      <h1>pick the best drawing!</h1>
-      <div class="col half" id="left">
-        <h2 class="leftplayer"></h2>
-        <canvas id="leftCanvas"></canvas>
-      </div>
-      <div class="col half" id="right">
-        <h2 class="rightplayer"></h2>
-        <canvas id="rightCanvas"></canvas>
-      </div>
+      <span class="ready">
+        <h1>images picked!</h1>
+        <button id="startVoting">vote!</button>
+      </span>
+      <span class="votingSection">
+        <h1>pick the best drawing!</h1>
+        <div class="col half" id="left">
+          <h2 class="leftplayer"></h2>
+          <canvas id="leftCanvas"></canvas>
+        </div>
+        <div class="col half" id="right">
+          <h2 class="rightplayer"></h2>
+          <canvas id="rightCanvas"></canvas>
+        </div>
+      </span>
     </section>
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script type="text/paperscript" src="leftcanvas.js" canvas="leftCanvas"></script>
+    <script type="text/paperscript" src="rightcanvas.js" canvas="rightCanvas"></script>
     <script>
       var socket = io();
       var players, drawings, uniqueID;
 
       // load game
 
-      $('section').fadeOut();
+      $('section, section .votingSection').fadeOut();
       $('.welcome').fadeIn(1000);
 
       // join the game
 
       $('#join').click(function(){
+        socket.emit('uniqueID', uniqueID);
         $('section').fadeOut(500);
         $('.draw').fadeIn(500);
+      })
+
+      $('#startVoting').click(function(){
+        $('section .ready').fadeOut(500);
+        $('section .votingSection').fadeIn(500);
       })
 
       // the submit drawing logic is in drawing.js.  It's gross but I haven't figured out a good workaround yet...
@@ -75,10 +89,10 @@
 
       // when a new player connects
 
-      socket.on('players', function(data, myID){
+      socket.on('players', function(data){
         $('.playercount').html(data);
         players = data;
-        uniqueID = myID;
+        uniqueID = makeid();
         startPlaying();
       })
 
@@ -98,25 +112,41 @@
           $('.vote').fadeIn(500);
         }
 
+        // do this when we get image data from the server
+
+        socket.on('sendImageJson', function(data){
+          //console.log(data);
+
+          getImage(data);
+
+        })
+
+      }
+
+      function makeid()
+      {
+          var text = "";
+          var possible = "0123456789";
+
+          for( var i=0; i < 10; i++ )
+              text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+          return text;
       }
 
       function getDrawings(){
-        var img1 = Math.floor((Math.random() * drawings) + 1);
-        var img2 = Math.floor((Math.random() * drawings) + 1);
+        var img1 = Math.floor((Math.random() * drawings));
+        var img2 = Math.floor((Math.random() * drawings));
 
         if(img1 == img2){
           getDrawings();
         } else {
-          console.log(img1, img2);
-          $('.leftplayer').html(img1);
-          $('.rightplayer').html(img2);
+          socket.emit('sendPickedImages', img1, img2);
         }
       }
 
       //socket.on('loadImage', getImage(img1, img2));
 
     </script>
-    <script type="text/paperscript" src="leftcanvas.js" canvas="leftCanvas"></script>
-    <script type="text/paperscript" src="rightcanvas.js" canvas="rightCanvas"></script>
   </body>
 </html>
