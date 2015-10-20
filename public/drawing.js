@@ -4,7 +4,6 @@ tool.maxDistance = 5;
 tool.minDistance = 5;
 
 function onMouseDrag(event) {
-    console.log('hey');
     var x = event.middlePoint.x;
     var y = event.middlePoint.y;
     var radius = event.delta.length;
