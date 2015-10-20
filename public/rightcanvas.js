@@ -1,18 +1,27 @@
-var myPicture = [];
 
 function getImage(data){
-  var d = data.uniqueID;
-  console.log(d);
-  var x = d.drawing.x;
-  var y = d.drawing.y;
-  var radius = d.drawing.radius;
-  var color = d.drawing.color;
-  myPicture.push(d.drawing);
-  drawCircle( x, y, radius, color );
+  var d = data[1];
+
+  for(i = 0; i < d.length; i++){
+    var x = d[i].drawing.x;
+    var y = d[i].drawing.y;
+    var radius = d[i].drawing.radius;
+    var color = d[i].drawing.color;
+    drawCircle( x, y, radius, color );
+  }
 }
 
 function drawCircle( x, y, radius, color ) {
     var circle = new Path.Circle( new Point( x, y ), radius );
-    circle.fillColor = new RgbColor( 0, 0, 0, 1 );
-    //view.draw();
+    circle.fillColor = color;
+    view.draw();
 } 
+
+// do this when we get image data from the server
+
+socket.on('sendImageJson', function(data){
+  //console.log(data);
+  $('section .ready').fadeOut(500);
+  $('section .votingSection').fadeIn(500);
+  getImage(data);
+})

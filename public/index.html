@@ -10,9 +10,6 @@
     <script type="text/paperscript" src="drawing.js" canvas="myCanvas"></script>
   </head>
   <body>
-
-
-
     <section class="welcome">
       <h1>welcome!  press join to join the game</h1>
       <button id="join">
@@ -51,8 +48,8 @@
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-    <script type="text/paperscript" src="leftcanvas.js" canvas="leftCanvas"></script>
-    <script type="text/paperscript" src="rightcanvas.js" canvas="rightCanvas"></script>
+<!--     <script type="text/paperscript" src="leftcanvas.js" canvas="leftCanvas"></script>
+    <script type="text/paperscript" src="rightcanvas.js" canvas="rightCanvas"></script> -->
     <script>
       var socket = io();
       var players, drawings, uniqueID;
@@ -68,11 +65,6 @@
         socket.emit('uniqueID', uniqueID);
         $('section').fadeOut(500);
         $('.draw').fadeIn(500);
-      })
-
-      $('#startVoting').click(function(){
-        $('section .ready').fadeOut(500);
-        $('section .votingSection').fadeIn(500);
       })
 
       // the submit drawing logic is in drawing.js.  It's gross but I haven't figured out a good workaround yet...
@@ -111,15 +103,6 @@
           $('.wait').fadeOut(500);
           $('.vote').fadeIn(500);
         }
-
-        // do this when we get image data from the server
-
-        socket.on('sendImageJson', function(data){
-          //console.log(data);
-
-          getImage(data);
-
-        })
 
       }
 
