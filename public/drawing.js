@@ -1,4 +1,5 @@
 var myPicture = [];
+var rightCanvasPlayer, leftCanvasPlayer;
 
 tool.maxDistance = 5;
 tool.minDistance = 5;
@@ -16,6 +17,9 @@ function getImage(data){
   for(j = 0; j < data.length; j++){
     paper = new paper.PaperScope();
     paper.setup($("canvas")[j+1]);
+    $('.votingSection canvas:eq('+j+')').attr('data-player', data[j][0].user);
+    console.log(data[j][0].user);
+    //$('canvas')[j+1].attr('data-player', data[j][0].user);
     var d = data[j];
 
     for(i = 0; i < d.length; i++){

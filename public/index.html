@@ -37,11 +37,11 @@
         <h1>pick the best drawing!</h1>
         <div class="col half" id="left">
           <h2 class="leftplayer"></h2>
-          <canvas id="leftCanvas"></canvas>
+          <canvas data-player="null" id="leftCanvas"></canvas>
         </div>
         <div class="col half" id="right">
           <h2 class="rightplayer"></h2>
-          <canvas id="rightCanvas"></canvas>
+          <canvas data-player="null" id="rightCanvas"></canvas>
         </div>
       </span>
     </section>
@@ -106,10 +106,16 @@
 
       }
 
+      $('#rightCanvas, #leftCanvas').click(function(){
+          alert($(this).attr('data-player'));
+          // var id = this.attr('data-player');
+          // alert('user '+id+' gets a point');
+      })
+
       function makeid()
       {
           var text = "";
-          var possible = "0123456789";
+          var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
           for( var i=0; i < 10; i++ )
               text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -124,11 +130,9 @@
         if(img1 == img2){
           getDrawings();
         } else {
-          socket.emit('sendPickedImages', img1, img2);
+          socket.emit('sendPickedImages');
         }
       }
-
-      //socket.on('loadImage', getImage(img1, img2));
 
     </script>
   </body>

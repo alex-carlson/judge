@@ -36,9 +36,8 @@ io.on('connection', function(socket){
     socket.emit('drawingCount', submittedDrawings);
   })
 
-  socket.on( 'sendPickedImages', function(img1, img2){
-    var data = drawingData;
-    socket.emit('sendImageJson', data);
+  socket.on( 'sendPickedImages', function(){
+    socket.emit('sendImageJson', drawingData);
   })
 
 });
