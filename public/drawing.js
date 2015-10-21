@@ -18,7 +18,6 @@ function getImage(data){
     paper = new paper.PaperScope();
     paper.setup($("canvas")[j+1]);
     $('.votingSection canvas:eq('+j+')').attr('data-player', data[j][0].user);
-    console.log(data[j][0].user);
     //$('canvas')[j+1].attr('data-player', data[j][0].user);
     var d = data[j];
 
@@ -48,19 +47,15 @@ function emitCircle( x, y, radius, color ) {
     myPicture.push(data);
 }
 
-var canvCount = $('canvas').length;
-
 // on submit drawing
 
 $('#submit').click(function(){
     socket.emit('sendPicture', myPicture);
     $('.draw').fadeOut(500);
     $('.wait').fadeIn(500);
-    //console.log(myPicture);
 })
 
 socket.on('sendImageJson', function(data){
-  //console.log(data);
   $('section .ready').fadeOut(500);
   $('section .votingSection').fadeIn(500);
   getImage(data);

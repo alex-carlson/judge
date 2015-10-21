@@ -19,8 +19,8 @@ io.on('connection', function(socket){
   io.emit('drawingCount', submittedDrawings);
 
   socket.on('uniqueID', function(data){
-    playerIPs.push(data);
-    console.log(playerIPs);
+    var obj = [ data, 0 ];
+    playerIPs.push(obj);
   })
   
   socket.on('disconnect', function(){
@@ -38,6 +38,19 @@ io.on('connection', function(socket){
 
   socket.on( 'sendPickedImages', function(){
     socket.emit('sendImageJson', drawingData);
+  })
+
+  socket.on('vote', function (data){
+    //var thisScore = playerIPs.find(data) + 1;
+    for(i = 0; i < playerIPs.length; i++){
+      var id = playerIPs[i][0];
+      var thisPlayerScore = playerIPs[i][1];
+      if(id == data){
+        console.log("prev: "+playerIPs[i][1]);
+        playerIPs[i][1] = thisPlayerScore+1;
+        console.log("new: "+playerIPs[i][1]);
+      }
+    }
   })
 
 });

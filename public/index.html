@@ -48,11 +48,10 @@
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-<!--     <script type="text/paperscript" src="leftcanvas.js" canvas="leftCanvas"></script>
-    <script type="text/paperscript" src="rightcanvas.js" canvas="rightCanvas"></script> -->
     <script>
       var socket = io();
       var players, drawings, uniqueID;
+      var votedFor;
 
       // load game
 
@@ -106,10 +105,12 @@
 
       }
 
+      // this happens when you vote on a drawing
+
       $('#rightCanvas, #leftCanvas').click(function(){
-          alert($(this).attr('data-player'));
-          // var id = this.attr('data-player');
-          // alert('user '+id+' gets a point');
+        votedFor = $(this).attr('data-player');
+        socket.emit('vote', votedFor);
+        $('#rightCanvas, #leftCanvas').addClass('disabled');
       })
 
       function makeid()
