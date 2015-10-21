@@ -8,6 +8,7 @@ var submittedDrawings = 0;
 var playerCount = io.sockets.sockets.length;
 var drawingData = [];
 var playerIPs = [];
+var votes = 0;
 
 app.use(bp.urlencoded({ extended:false })) //some garbage to enable parsing of the body
 app.use(bp.json()) // enable parsing of JSON files
@@ -41,15 +42,17 @@ io.on('connection', function(socket){
   })
 
   socket.on('vote', function (data){
+    votes++;
     //var thisScore = playerIPs.find(data) + 1;
     for(i = 0; i < playerIPs.length; i++){
       var id = playerIPs[i][0];
       var thisPlayerScore = playerIPs[i][1];
       if(id == data){
-        console.log("prev: "+playerIPs[i][1]);
         playerIPs[i][1] = thisPlayerScore+1;
-        console.log("new: "+playerIPs[i][1]);
       }
+    }
+    if(votes >= playerIPs.length){
+      socket.emit('votesCast');
     }
   })
 

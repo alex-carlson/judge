@@ -113,6 +113,14 @@
         $('#rightCanvas, #leftCanvas').addClass('disabled');
       })
 
+      // once we get all the votes
+
+      socket.on('votesCast', function(){
+        $('.vote').fadeOut(500);
+        startPlaying();
+        $('.vote .ready').fadeIn(500);
+      })
+
       function makeid()
       {
           var text = "";

@@ -18,7 +18,6 @@ function getImage(data){
     paper = new paper.PaperScope();
     paper.setup($("canvas")[j+1]);
     $('.votingSection canvas:eq('+j+')').attr('data-player', data[j][0].user);
-    //$('canvas')[j+1].attr('data-player', data[j][0].user);
     var d = data[j];
 
     for(i = 0; i < d.length; i++){
