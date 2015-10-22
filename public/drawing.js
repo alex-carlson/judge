@@ -54,8 +54,9 @@ $('#submit').click(function(){
     $('.wait').fadeIn(500);
 })
 
-socket.on('sendImageJson', function(data){
+socket.on('sendImageJson', function(data, prompt){
   $('section .ready').fadeOut(500);
+  $('#drawingPrompt').html(prompt);
   $('section .votingSection').fadeIn(500);
   getImage(data);
 })

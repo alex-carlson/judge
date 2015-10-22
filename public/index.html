@@ -34,7 +34,7 @@
         <button id="startVoting">vote!</button>
       </span>
       <span class="votingSection">
-        <h1>pick the best drawing!</h1>
+        <h1 id="drawingPrompt">pick the best drawing!</h1>
         <div class="col half" id="left">
           <h2 class="leftplayer"></h2>
           <canvas data-player="null" id="leftCanvas"></canvas>
@@ -133,6 +133,12 @@
       }
 
       function getDrawings(){
+
+        for (i = 0; i < players/3; i++){
+
+        }
+
+        // only getting 2 images
         var img1 = Math.floor((Math.random() * drawings));
         var img2 = Math.floor((Math.random() * drawings));
 

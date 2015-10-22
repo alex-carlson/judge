@@ -9,6 +9,11 @@ var playerCount = io.sockets.sockets.length;
 var drawingData = [];
 var playerIPs = [];
 var votes = 0;
+var votingPrompts = [
+  "Best Line Quality",
+  "Expresses Most Emotion",
+  "Most Dimensionality"
+];
 
 app.use(bp.urlencoded({ extended:false })) //some garbage to enable parsing of the body
 app.use(bp.json()) // enable parsing of JSON files
@@ -38,12 +43,12 @@ io.on('connection', function(socket){
   })
 
   socket.on( 'sendPickedImages', function(){
-    socket.emit('sendImageJson', drawingData);
+    var rPrompt = Math.floor(Math.random() * votingPrompts.length);
+    socket.emit('sendImageJson', drawingData, votingPrompts[rPrompt]);
   })
 
   socket.on('vote', function (data){
     votes++;
-    //var thisScore = playerIPs.find(data) + 1;
     for(i = 0; i < playerIPs.length; i++){
       var id = playerIPs[i][0];
       var thisPlayerScore = playerIPs[i][1];
