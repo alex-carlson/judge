@@ -1,14 +1,14 @@
 var myPicture = [];
 var rightCanvasPlayer, leftCanvasPlayer, myImage;
 
-tool.maxDistance = 5;
-tool.minDistance = 5;
+tool.maxDistance = 2;
+tool.minDistance = 1;
 
 function onMouseDrag(event) {
     var x = event.middlePoint.x;
     var y = event.middlePoint.y;
-    var radius = event.delta.length;
-    var color = 'black';
+    var radius = $('#brushSize').val()*1;
+    var color = $('#colorPicker').val();
     drawCircle( x, y, radius, color );
     emitCircle( x, y, radius, color );
 } 

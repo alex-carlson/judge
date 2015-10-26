@@ -69,12 +69,14 @@ io.on('connection', function(socket){
       io.emit('votesCast');
       votes = 0;
       var rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
+      console.log(rPrompt);
       getDrawings(rPrompt);
     }
   })
 
   socket.on('getImage', function(){
     var rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
+    console.log(rPrompt);
     getDrawings(rPrompt);
   })
 
