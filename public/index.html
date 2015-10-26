@@ -16,6 +16,10 @@
         join
       </button>
     </section>
+    <div>
+      <h4>players:</h4>
+      <ul id="playerList"></ul>
+    </div>
 
     <section class="draw">
       <h1>drawings recieved: <span class="recieved">0</span>/<span class="playercount">0</span></h1>
@@ -29,12 +33,8 @@
     </section>
 
     <section class="vote">
-      <span class="ready">
-        <h1>images picked!</h1>
-        <button id="startVoting">vote!</button>
-      </span>
       <span class="votingSection">
-        <h1 id="drawingPrompt">pick the best drawing!</h1>
+        <h1 id="drawingPrompt">drawing prompt</h1>
         <div class="col half" id="left">
           <h2 class="leftplayer"></h2>
           <canvas data-player="null" id="leftCanvas"></canvas>
@@ -61,7 +61,7 @@
       // join the game
 
       $('#join').click(function(){
-        socket.emit('uniqueID', uniqueID);
+        makeid();
         $('section').fadeOut(500);
         $('.draw').fadeIn(500);
       })
@@ -80,11 +80,20 @@
 
       // when a new player connects
 
-      socket.on('players', function(data){
+      socket.on('players', function(data, ips){
         $('.playercount').html(data);
         players = data;
-        uniqueID = makeid();
         startPlaying();
+      })
+
+      socket.on('updateScore', function(data){
+        $('#playerList').html('');
+        if(data != []){
+
+          for(i = 0; i < data.length; i++){
+            $('#playerList').append('<li id="'+data[i][0]+'">player '+(i+1)+' : <b>'+data[i][1]+'</b></li>');
+          }
+        }
       })
 
       function startPlaying(){
@@ -97,10 +106,11 @@
 
         //we're ready to start juding!
 
-        if(drawings == players && players > 1){
-          getDrawings();
+        if(drawings == players && players >= 2){
           $('.wait').fadeOut(500);
-          $('.vote').fadeIn(500);
+          $('.vote, .votingSection').fadeOut(500);
+          $('.vote, .votingSection').fadeIn(500);
+          socket.emit('getImage');
         }
 
       }
@@ -115,10 +125,8 @@
 
       // once we get all the votes
 
-      socket.on('votesCast', function(){
-        $('.vote').fadeOut(500);
+      socket.on('votesCast', function(data){
         startPlaying();
-        $('.vote .ready').fadeIn(500);
       })
 
       function makeid()
@@ -126,23 +134,13 @@
           var text = "";
           var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-          for( var i=0; i < 10; i++ )
-              text += possible.charAt(Math.floor(Math.random() * possible.length));
+          for( var i=0; i < 10; i++ ){
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+          }
 
-          return text;
-      }
+          uniqueID = text;
 
-      function getDrawings(){
-
-        // only getting 2 images
-        var img1 = Math.floor((Math.random() * drawings));
-        var img2 = Math.floor((Math.random() * drawings));
-
-        if(img1 == img2){
-          getDrawings();
-        } else {
-          socket.emit('sendPickedImages');
-        }
+          socket.emit('uniqueID', uniqueID);
       }
 
     </script>

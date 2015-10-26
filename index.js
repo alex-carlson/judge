@@ -21,18 +21,20 @@ app.use(express.static('public')); //use express in static mode to look into the
 
 io.on('connection', function(socket){
   playerCount++;
-  io.emit('players', playerCount);
+  //io.emit('players', playerCount, playerIPs);
   io.emit('drawingCount', submittedDrawings);
 
   socket.on('uniqueID', function(data){
     var obj = [ data, 0 ];
     playerIPs.push(obj);
+    io.emit('updateScore', playerIPs);
+    io.emit('players', playerCount, playerIPs);
   })
   
   socket.on('disconnect', function(){
     playerCount--;
     io.emit('players', playerCount);
-    socket.emit('drawingCount', submittedDrawings);
+    io.emit('drawingCount', submittedDrawings);
   });
 
   socket.on( 'sendPicture', function ( data ) {
@@ -41,10 +43,14 @@ io.on('connection', function(socket){
     io.emit('drawingCount', submittedDrawings);
   })
 
+  //when we recieve a new image
+
   socket.on( 'sendPickedImages', function(){
     var rPrompt = Math.floor(Math.random() * votingPrompts.length);
     io.emit('sendImageJson', drawingData, votingPrompts[rPrompt]);
   })
+
+  // when we get a vote
 
   socket.on('vote', function (data){
     votes++;
@@ -54,13 +60,44 @@ io.on('connection', function(socket){
       if(id == data){
         playerIPs[i][1] = thisPlayerScore+1;
       }
+      io.emit('updateScore', playerIPs);
     }
+
+    // if we have all the votes, do this.
+
     if(votes >= playerIPs.length){
-      socket.emit('votesCast');
+      io.emit('votesCast');
+      votes = 0;
+      var rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
+      getDrawings(rPrompt);
     }
   })
 
+  socket.on('getImage', function(){
+    var rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
+    getDrawings(rPrompt);
+  })
+
 });
+
+function getDrawings(rPrompt){
+  // only getting 2 images
+
+  var img1 = Math.floor((Math.random() * submittedDrawings));
+  var img2 = Math.floor((Math.random() * submittedDrawings));
+
+  if(img1 == img2){
+    getDrawings();
+  } else {
+
+    var images = [img1, img2];
+
+    // do this when we have our two images
+    //io.emit('imagesSelected', img1, img2);
+    io.emit('sendImageJson', drawingData, images, rPrompt);
+
+  }
+}
 
 http.listen(3000, function(){
   console.log('listening on localhost:3000');
