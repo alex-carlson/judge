@@ -36,15 +36,14 @@ io.on('connection', function(socket){
   });
 
   socket.on( 'sendPicture', function ( data ) {
-    // socket.broadcast.emit( 'drawCircle', data );
     submittedDrawings++;
     drawingData.push(data);
-    socket.emit('drawingCount', submittedDrawings);
+    io.emit('drawingCount', submittedDrawings);
   })
 
   socket.on( 'sendPickedImages', function(){
     var rPrompt = Math.floor(Math.random() * votingPrompts.length);
-    socket.emit('sendImageJson', drawingData, votingPrompts[rPrompt]);
+    io.emit('sendImageJson', drawingData, votingPrompts[rPrompt]);
   })
 
   socket.on('vote', function (data){
