@@ -4,10 +4,12 @@
     <title>Judge [working title]</title>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <!-- Load the Paper.js library -->
     <script type="text/javascript" src="paper-full.min.js"></script>
     <!-- Define inlined PaperScript associate it with myCanvas -->
-    <script type="text/paperscript" src="drawing.js" canvas="myCanvas"></script>
+    <script type="text/javascript" src="http://bgrins.github.com/spectrum/spectrum.js"></script>
+    <link rel='stylesheet' href='spectrum.css' />
   </head>
   <body>
     <section class="welcome">
@@ -17,7 +19,6 @@
       </button>
     </section>
     <section id="scoreboard">
-      <h4>players:</h4>
       <ul id="playerList"></ul>
     </section>
 
@@ -25,7 +26,7 @@
       <h1>drawings recieved: <span class="recieved">0</span>/<span class="playercount">0</span></h1>
       <canvas id="myCanvas" resize></canvas>
       <input type="range" id="brushSize" value="5" min="1" max="35"><br>
-      <input type=color pattern="#[a-f0-9]{6}" id="colorPicker" title="hexadecimal color" placeholder="#ff0000">
+      <input type='color' id="colorpicker"/>
       <button id="submit">submit your drawing</button>
     </section>
 
@@ -49,11 +50,17 @@
     </section>
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script type="text/paperscript" src="drawing.js" canvas="myCanvas"></script>
     <script>
       var socket = io();
       var players, drawings, uniqueID;
       var votedFor;
+
+      // load color picker
+
+      $("#colorpicker").spectrum({
+          color: "#f00"
+      });
 
       // load game
 
@@ -141,7 +148,6 @@
       socket.on('votesCast', function(data){
         startPlaying();
       })
-
     </script>
   </body>
 </html>

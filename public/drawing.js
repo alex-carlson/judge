@@ -1,5 +1,6 @@
 var myPicture = [];
 var rightCanvasPlayer, leftCanvasPlayer, myImage;
+var myPng;
 
 tool.maxDistance = 2;
 tool.minDistance = 1;
@@ -8,9 +9,8 @@ function onMouseDrag(event) {
     var x = event.middlePoint.x;
     var y = event.middlePoint.y;
     var radius = $('#brushSize').val()*1;
-    var color = $('#colorPicker').val();
+    var color = $("#colorpicker").spectrum('get').toHexString();
     drawCircle( x, y, radius, color );
-    emitCircle( x, y, radius, color );
 } 
 
 function getImage(data, imgs){
@@ -24,6 +24,7 @@ function getImage(data, imgs){
     
     $('.votingSection canvas:eq('+j+')').attr('data-player', data[imgs[j]][0].user);
     $('.votingSection canvas:eq('+j+')').removeClass('disabled');
+
     var d = data[imgs[j]];
 
     for(i = 0; i < d.length; i++){
@@ -42,17 +43,14 @@ function drawCircle( x, y, radius, color ) {
     circle.fillColor = color;
     myImage = new Group();
     //view.draw();
-} 
- 
-function emitCircle( x, y, radius, color ) {
-  
+
     var data = {
         "user": uniqueID,
         "drawing": { x: x, y: y, radius: radius, color: color }
     }
 
     myPicture.push(data);
-}
+} 
 
 // on submit drawing
 
