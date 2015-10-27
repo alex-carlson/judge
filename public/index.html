@@ -2,21 +2,17 @@
 <html>
   <head>
     <title>Judge [working title]</title>
-    <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Lato:100,400,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <!-- Load the Paper.js library -->
     <script type="text/javascript" src="paper-full.min.js"></script>
     <!-- Define inlined PaperScript associate it with myCanvas -->
-    <script type="text/javascript" src="http://bgrins.github.com/spectrum/spectrum.js"></script>
-    <link rel='stylesheet' href='spectrum.css' />
   </head>
   <body>
     <section class="welcome">
       <h1>welcome!</h1>
-      <button id="join">
-        join
-      </button>
+      <button id="join">Join Game</button>
     </section>
     <section id="scoreboard">
       <ul id="playerList"></ul>
@@ -24,9 +20,16 @@
 
     <section class="draw">
       <h1>drawings recieved: <span class="recieved">0</span>/<span class="playercount">0</span></h1>
-      <canvas id="myCanvas" resize></canvas>
       <input type="range" id="brushSize" value="5" min="1" max="35"><br>
-      <input type='color' id="colorpicker"/>
+      <select name="color" id="colorpicker">
+        <option value="red">Red</option>
+        <option value="green">Green</option>
+        <option value="blue">Blue</option>
+        <option value="yellow">Yellow</option>
+        <option value="black">Black</option>
+        <option value="white">White</option>
+      </select><br>
+      <canvas id="myCanvas" resize></canvas>
       <button id="submit">submit your drawing</button>
     </section>
 
@@ -55,12 +58,6 @@
       var socket = io();
       var players, drawings, uniqueID;
       var votedFor;
-
-      // load color picker
-
-      $("#colorpicker").spectrum({
-          color: "#f00"
-      });
 
       // load game
 
