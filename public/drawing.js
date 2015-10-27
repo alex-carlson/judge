@@ -9,7 +9,7 @@ function onMouseDrag(event) {
     var x = event.middlePoint.x;
     var y = event.middlePoint.y;
     var radius = $('#brushSize').val()*1;
-    var color = $("#colorpicker").spectrum('get').toHexString();
+    var color = $("#colorpicker").val();
     drawCircle( x, y, radius, color );
 } 
 
