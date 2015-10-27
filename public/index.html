@@ -16,10 +16,10 @@
         join
       </button>
     </section>
-    <div>
+    <section id="scoreboard">
       <h4>players:</h4>
       <ul id="playerList"></ul>
-    </div>
+    </section>
 
     <section class="draw">
       <h1>drawings recieved: <span class="recieved">0</span>/<span class="playercount">0</span></h1>
@@ -63,9 +63,12 @@
       // join the game
 
       $('#join').click(function(){
-        makeid();
         $('section').fadeOut(500);
         $('.draw').fadeIn(500);
+      })
+
+      socket.on('playerID', function(data){
+        uniqueID = data;
       })
 
       // the submit drawing logic is in drawing.js.  It's gross but I haven't figured out a good workaround yet...
@@ -86,6 +89,14 @@
         $('.playercount').html(data);
         players = data;
         startPlaying();
+
+        $('#playerList').html('');
+        if(ips != []){
+
+          for(i = 0; i < ips.length; i++){
+            $('#playerList').append('<li id="'+ips[i][0]+'">player '+(i+1)+' : <b>'+ips[i][1]+'</b></li>');
+          }
+        }
       })
 
       socket.on('updateScore', function(data){
@@ -111,7 +122,7 @@
         if(drawings == players && players >= 2){
           $('.wait').fadeOut(500);
           $('.vote, .votingSection').fadeOut(500);
-          $('.vote, .votingSection').fadeIn(500);
+          $('.vote, .votingSection, #scoreboard').fadeIn(500);
           socket.emit('getImage');
         }
 
@@ -130,20 +141,6 @@
       socket.on('votesCast', function(data){
         startPlaying();
       })
-
-      function makeid()
-      {
-          var text = "";
-          var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-          for( var i=0; i < 10; i++ ){
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
-          }
-
-          uniqueID = text;
-
-          socket.emit('uniqueID', uniqueID);
-      }
 
     </script>
   </body>

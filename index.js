@@ -6,7 +6,7 @@ var bp = require('body-parser');
 
 var submittedDrawings = 0;
 var drawingData = [];
-var playerIPs = [];
+var scores = [];
 var allClients = [];
 var votes = 0;
 var votingPrompts = [
@@ -20,21 +20,21 @@ app.use(bp.json()) // enable parsing of JSON files
 app.use(express.static('public')); //use express in static mode to look into the 'public' folder for files (.html, .jpg, .css, etc.)
 
 io.on('connection', function(socket){
+  socket.emit('playerID', socket.id);
   allClients.push(socket);
-  //io.emit('players', playerCount, playerIPs);
+  //io.emit('players', playerCount, scores);
   io.emit('drawingCount', submittedDrawings);
-
-  socket.on('uniqueID', function(data){
-    var obj = [ data, 0 ];
-    playerIPs.push(obj);
-    io.emit('updateScore', playerIPs);
-    io.emit('players', allClients.length, playerIPs);
-  })
+  var obj = [ socket.id, 0 ];
+  scores.push(obj);
+  io.emit('updateScore', scores);
+  io.emit('players', allClients.length, scores);
   
   socket.on('disconnect', function(){
     var i = allClients.indexOf(socket);
     allClients.splice(i, 1);
-    io.emit('players', allClients.length);
+    scores.splice(i, 1);
+    io.emit('players', allClients.length, scores);
+    submittedDrawings--;
     io.emit('drawingCount', submittedDrawings);
   });
 
@@ -55,18 +55,18 @@ io.on('connection', function(socket){
 
   socket.on('vote', function (data){
     votes++;
-    for(i = 0; i < playerIPs.length; i++){
-      var id = playerIPs[i][0];
-      var thisPlayerScore = playerIPs[i][1];
+    for(i = 0; i < scores.length; i++){
+      var id = scores[i][0];
+      var thisPlayerScore = scores[i][1];
       if(id == data){
-        playerIPs[i][1] = thisPlayerScore+1;
+        scores[i][1] = thisPlayerScore+1;
       }
-      io.emit('updateScore', playerIPs);
+      io.emit('updateScore', scores);
     }
 
     // if we have all the votes, do this.
 
-    if(votes >= playerIPs.length){
+    if(votes >= scores.length){
       io.emit('votesCast');
       votes = 0;
       var rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
