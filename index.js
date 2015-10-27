@@ -5,9 +5,9 @@ var io = require('socket.io')(http);
 var bp = require('body-parser');
 
 var submittedDrawings = 0;
-var playerCount = io.sockets.sockets.length;
 var drawingData = [];
 var playerIPs = [];
+var allClients = [];
 var votes = 0;
 var votingPrompts = [
   "Best Line Quality",
@@ -20,7 +20,7 @@ app.use(bp.json()) // enable parsing of JSON files
 app.use(express.static('public')); //use express in static mode to look into the 'public' folder for files (.html, .jpg, .css, etc.)
 
 io.on('connection', function(socket){
-  playerCount++;
+  allClients.push(socket);
   //io.emit('players', playerCount, playerIPs);
   io.emit('drawingCount', submittedDrawings);
 
@@ -28,12 +28,13 @@ io.on('connection', function(socket){
     var obj = [ data, 0 ];
     playerIPs.push(obj);
     io.emit('updateScore', playerIPs);
-    io.emit('players', playerCount, playerIPs);
+    io.emit('players', allClients.length, playerIPs);
   })
   
   socket.on('disconnect', function(){
-    playerCount--;
-    io.emit('players', playerCount);
+    var i = allClients.indexOf(socket);
+    allClients.splice(i, 1);
+    io.emit('players', allClients.length);
     io.emit('drawingCount', submittedDrawings);
   });
 
@@ -69,14 +70,12 @@ io.on('connection', function(socket){
       io.emit('votesCast');
       votes = 0;
       var rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
-      console.log(rPrompt);
       getDrawings(rPrompt);
     }
   })
 
   socket.on('getImage', function(){
     var rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
-    console.log(rPrompt);
     getDrawings(rPrompt);
   })
 

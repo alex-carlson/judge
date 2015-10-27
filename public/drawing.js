@@ -21,6 +21,7 @@ function getImage(data, imgs){
     }
     paper = new paper.PaperScope();
     paper.setup($("canvas")[j+1]);
+    
     $('.votingSection canvas:eq('+j+')').attr('data-player', data[imgs[j]][0].user);
     $('.votingSection canvas:eq('+j+')').removeClass('disabled');
     var d = data[imgs[j]];
