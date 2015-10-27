@@ -61,9 +61,10 @@ $('#submit').click(function(){
 })
 
 socket.on('sendImageJson', function(data, images, prompt){
-    $('#drawingPrompt').html(prompt);
     $('.wait').fadeOut(500);
-    $('section.vote').fadeIn(500);
+    $('section.vote').fadeIn(500, function(){
+        $('#drawingPrompt').html(prompt);
+    });
     $('section .ready').fadeOut(500);
     getImage(data, images);
 })

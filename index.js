@@ -11,9 +11,17 @@ var allClients = [];
 var votes = 0;
 var votingPrompts = [
   "Best Line Quality",
-  "Expresses Most Emotion",
-  "Most Dimensionality"
+  "Most Dimensionality",
+  "Most Human-like",
+  "Most Rhythmic",
+  "Most Structured",
+  "Most Color Variation",
+  "Cleanest",
+  "Sloppiest",
+  "Straightest Lines",
+  "Most Realistic"
 ];
+var rPrompt = 0;
 
 app.use(bp.urlencoded({ extended:false })) //some garbage to enable parsing of the body
 app.use(bp.json()) // enable parsing of JSON files
@@ -28,13 +36,20 @@ io.on('connection', function(socket){
   scores.push(obj);
   io.emit('updateScore', scores);
   io.emit('players', allClients.length, scores);
+
+  // do stuff on player disconnect
   
   socket.on('disconnect', function(){
+    submittedDrawings--;
+
+    // remove this client from the game
     var i = allClients.indexOf(socket);
     allClients.splice(i, 1);
+
+    //also remove this player's score.  :(
     scores.splice(i, 1);
+
     io.emit('players', allClients.length, scores);
-    submittedDrawings--;
     io.emit('drawingCount', submittedDrawings);
   });
 
@@ -42,13 +57,6 @@ io.on('connection', function(socket){
     submittedDrawings++;
     drawingData.push(data);
     io.emit('drawingCount', submittedDrawings);
-  })
-
-  //when we recieve a new image
-
-  socket.on( 'sendPickedImages', function(){
-    var rPrompt = Math.floor(Math.random() * votingPrompts.length);
-    io.emit('sendImageJson', drawingData, votingPrompts[rPrompt]);
   })
 
   // when we get a vote
@@ -69,13 +77,13 @@ io.on('connection', function(socket){
     if(votes >= scores.length){
       io.emit('votesCast');
       votes = 0;
-      var rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
+      rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
       getDrawings(rPrompt);
     }
   })
 
   socket.on('getImage', function(){
-    var rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
+    rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
     getDrawings(rPrompt);
   })
 
@@ -87,9 +95,12 @@ function getDrawings(rPrompt){
   var img1 = Math.floor((Math.random() * submittedDrawings));
   var img2 = Math.floor((Math.random() * submittedDrawings));
 
-  if(img1 == img2){
-    getDrawings();
-  } else {
+
+  // make sure we get 2 different images;
+
+  while (img1 == img2){
+    img2 = Math.floor((Math.random() * submittedDrawings));
+  }
 
     var images = [img1, img2];
 
@@ -97,7 +108,6 @@ function getDrawings(rPrompt){
     //io.emit('imagesSelected', img1, img2);
     io.emit('sendImageJson', drawingData, images, rPrompt);
 
-  }
 }
 
 http.listen(3000, function(){
