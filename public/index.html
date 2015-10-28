@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Judge [working title]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link href='https://fonts.googleapis.com/css?family=Lato:100,400,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -20,15 +21,19 @@
 
     <section class="draw">
       <h1>drawings recieved: <span class="recieved">0</span>/<span class="playercount">0</span></h1>
-      <input type="range" id="brushSize" value="5" min="1" max="35"><br>
-      <select name="color" id="colorpicker">
-        <option value="red">Red</option>
-        <option value="green">Green</option>
-        <option value="blue">Blue</option>
-        <option value="yellow">Yellow</option>
-        <option value="black">Black</option>
-        <option value="white">White</option>
-      </select><br>
+      <div class="rangeholder">
+        <input type="range" id="brushSize" value="5" min="1" max="35">
+        <span id="smallStroke">1</span>
+        <span id="bigStroke">45</span>
+      </div>
+      <div class="colors">
+        <span class="red" data-color="red">red</span>
+        <span class="green" data-color="green">green</span>
+        <span class="blue" data-color="blue">blue</span>
+        <span class="yellow" data-color="yellow">yellow</span>
+        <span class="black" data-color="black">black</span>
+        <span class="white" data-color="white">white</span>
+      </div>
       <canvas id="myCanvas" resize></canvas>
       <button id="submit">submit your drawing</button>
     </section>

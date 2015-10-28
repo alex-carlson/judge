@@ -1,15 +1,28 @@
 var myPicture = [];
 var rightCanvasPlayer, leftCanvasPlayer, myImage;
 var myPng;
+var activeColor = "black";
 
 tool.maxDistance = 2;
 tool.minDistance = 1;
+
+$('.colors span').click(function(){
+    $('.colors span').removeClass('active');
+    activeColor = $(this).attr('data-color');
+    $(this).addClass('active');
+});
+
+$('#brushSize').click(function(){
+    var size = $(this).val();
+    $('#strokeSize').css('height', size);
+    $('#strokeSize').css('width', size);
+})
 
 function onMouseDrag(event) {
     var x = event.middlePoint.x;
     var y = event.middlePoint.y;
     var radius = $('#brushSize').val()*1;
-    var color = $("#colorpicker").val();
+    var color = activeColor;
     drawCircle( x, y, radius, color );
 } 
 

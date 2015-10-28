@@ -3,10 +3,29 @@ html{
   color: #7F7F7F;
   font-family: 'Lato', sans-serif;
   font-weight: 100;
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  padding: 15px;
+  margin: 0;
 }
 
 h1{
   font-weight: 100;
+  margin: 0;
+  margin-bottom: 15px;
+  text-align: center;
+}
+section{
+  text-align: center;
+}
+input{
+  display: inline-block;
+}
+#brushSize{
+  margin: 0;
 }
 canvas{
   background: #fff;
@@ -24,6 +43,11 @@ canvas{
 li b{
   font-size: 1.2em;
   font-weight: 100;
+}
+
+ul{
+  list-style: none;
+  padding-left: 0;
 }
 
 #drawingPrompt{
@@ -50,4 +74,101 @@ button{
 .disabled{
   opacity: 0.5;
   pointer-events: none;
+}
+
+/* color div styles */
+
+.colors{
+  color: #fff;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5px;
+}
+
+.colors span{
+  padding: 10px 0;
+  border: solid 1px;
+  font-weight: 300;
+  float: left;
+  flex: 1 1 auto;
+  display: block;
+}
+.colors span.active{
+  border: solid 1px #000 !important;
+  font-weight: 400;
+}
+
+.colors span.red{
+  background-color: red;
+  border-color: red;
+}
+.colors span.green{
+  background-color: green;
+  border-color: green;
+}
+
+.colors span.blue{
+  background-color: blue;
+  border-color: blue;
+}
+
+.colors span.yellow{
+  background-color: yellow;
+  color: #000;
+  border-color: yellow;
+}
+
+.colors span.black{
+  background-color: black;
+  border-color: black;
+}
+
+.colors span.white{
+  background-color: white;
+  color: #000;
+  border-color: black;
+}
+
+/*range styles*/
+
+.rangeholder{
+  position: relative;
+}
+
+input[type=range] {
+  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
+  width: 100%; /* Specific width is required for Firefox. */
+  background: #F2F2F2;
+  height: 35px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 35px;
+  height: 35px;
+  background: #ccc;
+}
+
+input[type=range]:focus {
+  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
+}
+
+input[type=range]::-ms-track {
+  width: 100%;
+  cursor: pointer;
+  background: #F2F2F2; /* Hides the slider so custom styles can be added */
+  border-color: transparent;
+  color: transparent;
+}
+
+#smallStroke{
+  position: absolute;
+  left: 12px;
+  top: 8px;
+}
+#bigStroke{
+  position: absolute;
+  right: 9px;
+  top: 8px;
 }
