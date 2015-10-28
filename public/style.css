@@ -13,12 +13,21 @@ canvas{
   width: 250px;
   height: 250px;
   border: solid 1px #ccc;
+  display: inline-block;
 }
 .col.half{
   width: 50%;
   float: left;
-  position: relative;
-  height: 250px;
+  text-align: center;
+}
+
+li b{
+  font-size: 1.2em;
+  font-weight: 100;
+}
+
+#drawingPrompt{
+  text-align: center;
 }
 
 button{

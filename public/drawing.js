@@ -34,6 +34,7 @@ function getImage(data, imgs){
         var color = d[i].drawing.color;
         drawCircle( x, y, radius, color );
     }
+    paper.view.update();
   }
   $('section .votingSection').fadeIn(500);
 }
@@ -42,7 +43,6 @@ function drawCircle( x, y, radius, color ) {
     var circle = new Path.Circle( new Point( x, y ), radius );
     circle.fillColor = color;
     myImage = new Group();
-    //view.draw();
 
     var data = {
         "user": uniqueID,
