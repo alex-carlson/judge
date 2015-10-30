@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Judge [working title]</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0" />
     <link href='https://fonts.googleapis.com/css?family=Lato:100,400,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -55,6 +55,11 @@
           <canvas data-player="null" id="rightCanvas"></canvas>
         </div>
       </span>
+    </section>
+
+    <section class="gameOver">
+      <h1>Game Over!</h1>
+      <h4></h4>
     </section>
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
@@ -115,6 +120,17 @@
           for(i = 0; i < data.length; i++){
             $('#playerList').append('<li id="'+data[i][0]+'">player '+(i+1)+' : <b>'+data[i][1]+'</b></li>');
           }
+        }
+      })
+
+      socket.on('gameOver', function(data){
+        $('section').fadeOut(500);
+        $('.gameOver').fadeIn(500);
+
+        if(data[0] == uniqueID){
+          $('.gameOver h4').html('YOU WIN!');
+        } else {
+          $('.gameOver h4').html('YOU LOSE!');
         }
       })
 

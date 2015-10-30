@@ -77,8 +77,15 @@ io.on('connection', function(socket){
     if(votes >= scores.length){
       io.emit('votesCast');
       votes = 0;
-      rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
-      getDrawings(rPrompt);
+
+      for(i = 0; i < scores.length; i++){
+        if(scores[i][1] >= 2){
+          io.emit('gameOver', scores[i]);
+        } else {
+          rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
+          getDrawings(rPrompt);
+        }
+      }
     }
   })
 
