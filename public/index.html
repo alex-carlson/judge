@@ -38,6 +38,11 @@
       <button id="submit">submit your drawing</button>
     </section>
 
+    <section class="gameinprogress">
+      <h1>Game is in progress.  :(</h1>
+      <h4>Please wait for the current game to end.</h4>
+    </section>
+
     <section class="wait">
       <h1>waiting for everyone to submit a drawing...</h1>
       <p>drawings recieved: <span class="recieved">0</span>/<span class="playercount">0</span></p>
@@ -60,6 +65,7 @@
     <section class="gameOver">
       <h1>Game Over!</h1>
       <h4></h4>
+      <button class="restart">Restart</button>
     </section>
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
@@ -152,6 +158,14 @@
         }
 
       }
+
+      // restart button logic
+
+      $('.restart').click(function(){
+        $('section').fadeOut(500);
+        $('.welcome').fadeIn(500);
+        socket.emit('restart');
+      })
 
       // this happens when you vote on a drawing
 

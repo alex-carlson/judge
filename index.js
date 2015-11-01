@@ -94,6 +94,10 @@ io.on('connection', function(socket){
     getDrawings(rPrompt);
   })
 
+  socket.on('restart', function(){
+    submittedDrawings--;
+  })
+
 });
 
 function getDrawings(rPrompt){
