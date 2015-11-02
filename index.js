@@ -48,9 +48,12 @@ io.on('connection', function(socket){
 
     // removing all of this player's drawing stuff.
 
+    console.log(drawingData);
+
     for(i = 0; i < drawingData.length; i++){
       if(drawingData[i][0] == socket.id){
         drawingData.splice($.inArray(i, drawingData), 1);
+
       }
     }
 
@@ -61,10 +64,13 @@ io.on('connection', function(socket){
     //also remove this player's score.  :(
     scores.splice(i, 1);
 
-    // decrement the submitted drawings if this player did submit a drawing.
+    // decrement the submitted drawings if this player DID submit a drawing.
+
+    //console.log(submittedDrawings.indexOf(socket.id[0]))
 
     if(submittedDrawings.indexOf(socket.id[0])){
-      submittedDrawings.splice(socket.id, 1);
+      var playerToRemove = submittedDrawings.indexOf(socket.id);
+      submittedDrawings.splice(playerToRemove, 1);
     }
 
     io.emit('players', allClients.length, scores);
@@ -98,7 +104,7 @@ io.on('connection', function(socket){
       votes = 0;
 
       for(i = 0; i < scores.length; i++){
-        if(scores[i][1] >= 2){
+        if(scores[i][1] >= 10){
           io.emit('gameOver', scores[i]);
         } else {
           rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
