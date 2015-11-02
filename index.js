@@ -4,7 +4,7 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var bp = require('body-parser');
 
-var submittedDrawings = 0;
+var submittedDrawings = [];
 var drawingData = [];
 var scores = [];
 var allClients = [];
@@ -19,7 +19,12 @@ var votingPrompts = [
   "Cleanest",
   "Sloppiest",
   "Straightest Lines",
-  "Most Realistic"
+  "Most Realistic",
+  "Most Planar",
+  "Most Grand",
+  "Smallest",
+  "Coldest",
+  "Warmest"
 ];
 var rPrompt = 0;
 
@@ -40,7 +45,14 @@ io.on('connection', function(socket){
   // do stuff on player disconnect
   
   socket.on('disconnect', function(){
-    submittedDrawings--;
+
+    // removing all of this player's drawing stuff.
+
+    for(i = 0; i < drawingData.length; i++){
+      if(drawingData[i][0] == socket.id){
+        drawingData.splice($.inArray(i, drawingData), 1);
+      }
+    }
 
     // remove this client from the game
     var i = allClients.indexOf(socket);
@@ -49,12 +61,19 @@ io.on('connection', function(socket){
     //also remove this player's score.  :(
     scores.splice(i, 1);
 
+    // decrement the submitted drawings if this player did submit a drawing.
+
+    if(submittedDrawings.indexOf(socket.id[0])){
+      submittedDrawings.splice(socket.id, 1);
+    }
+
     io.emit('players', allClients.length, scores);
     io.emit('drawingCount', submittedDrawings);
+    io.emit('updateScore', scores);
   });
 
   socket.on( 'sendPicture', function ( data ) {
-    submittedDrawings++;
+    submittedDrawings.push(socket.id);
     drawingData.push(data);
     io.emit('drawingCount', submittedDrawings);
   })
@@ -95,7 +114,13 @@ io.on('connection', function(socket){
   })
 
   socket.on('restart', function(){
-    submittedDrawings--;
+    submittedDrawings = [];
+    io.emit('drawingCount', submittedDrawings);
+    drawingData = [];
+    for(i = 0; i < scores.length; i++){
+      scores[i][1] = 0;
+    }
+    io.emit('updateScore', scores);
   })
 
 });
@@ -103,14 +128,14 @@ io.on('connection', function(socket){
 function getDrawings(rPrompt){
   // only getting 2 images
 
-  var img1 = Math.floor((Math.random() * submittedDrawings));
-  var img2 = Math.floor((Math.random() * submittedDrawings));
+  var img1 = Math.floor((Math.random() * submittedDrawings.length));
+  var img2 = Math.floor((Math.random() * submittedDrawings.length));
 
 
   // make sure we get 2 different images;
 
   while (img1 == img2){
-    img2 = Math.floor((Math.random() * submittedDrawings));
+    img2 = Math.floor((Math.random() * submittedDrawings.length));
   }
 
     var images = [img1, img2];

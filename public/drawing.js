@@ -65,12 +65,20 @@ function drawCircle( x, y, radius, color ) {
     myPicture.push(data);
 } 
 
+function clearCanvas(){
+
+    myPicture = [];
+    project.activeLayer.removeChildren();
+    paper.view.update();
+}
+
 // on submit drawing
 
 $('#submit').click(function(){
     socket.emit('sendPicture', myPicture);
     $('.draw').fadeOut(500);
     $('.wait').fadeIn(500);
+    paper.view.update();
 })
 
 socket.on('sendImageJson', function(data, images, prompt){
@@ -80,4 +88,8 @@ socket.on('sendImageJson', function(data, images, prompt){
     });
     $('section .ready').fadeOut(500);
     getImage(data, images);
+})
+
+socket.on('gameOver', function(){
+    clearCanvas();
 })

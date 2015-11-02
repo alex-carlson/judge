@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Judge [working title]</title>
+    <title>Surface</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0" />
     <link href='https://fonts.googleapis.com/css?family=Lato:100,400,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="style.css">
@@ -96,8 +96,9 @@
       // when we get a new drawing from a player
 
       socket.on('drawingCount', function(data){
-        $('.recieved').html(data);
-        drawings = data;
+        $('.recieved').html(data.length);
+        drawings = data.length;
+
         // on submit drawing
         socket.emit('sendImage', data);
         startPlaying();
@@ -112,26 +113,33 @@
 
         $('#playerList').html('');
         if(ips != []){
-
+          // get number of players and add them to the clientside list
           for(i = 0; i < ips.length; i++){
             $('#playerList').append('<li id="'+ips[i][0]+'">player '+(i+1)+' : <b>'+ips[i][1]+'</b></li>');
           }
         }
       })
 
+      // someone submitted a vote, update the score!
+
       socket.on('updateScore', function(data){
         $('#playerList').html('');
         if(data != []){
 
+          // get all the players and list 'em out in a ul
           for(i = 0; i < data.length; i++){
             $('#playerList').append('<li id="'+data[i][0]+'">player '+(i+1)+' : <b>'+data[i][1]+'</b></li>');
           }
         }
       })
 
+      // game over, someone got all the points!
+
       socket.on('gameOver', function(data){
         $('section').fadeOut(500);
         $('.gameOver').fadeIn(500);
+
+        // check if the winner id belongs to this player
 
         if(data[0] == uniqueID){
           $('.gameOver h4').html('YOU WIN!');
@@ -177,7 +185,7 @@
 
       // once we get all the votes
 
-      socket.on('votesCast', function(data){
+      socket.on('votesCast', function(){
         startPlaying();
       })
     </script>
