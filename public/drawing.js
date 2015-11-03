@@ -34,20 +34,16 @@ function getImage(data, imgs){
     }
     paper = new paper.PaperScope();
     paper.setup($("canvas")[j+1]);
-    
-    $('.votingSection canvas:eq('+j+')').attr('data-player', data[imgs[j]][0].user);
-    $('.votingSection canvas:eq('+j+')').removeClass('disabled');
+
+    var thisIMG = $('.votingSection img:eq('+j+')');    
+    $('.votingSection img:eq('+j+')').removeClass('disabled');
 
     var d = data[imgs[j]];
 
-    for(i = 0; i < d.length; i++){
-        var x = d[i].drawing.x;
-        var y = d[i].drawing.y;
-        var radius = d[i].drawing.radius;
-        var color = d[i].drawing.color;
-        drawCircle( x, y, radius, color );
-    }
-    paper.view.update();
+    thisIMG.attr('src', d.drawing);
+    thisIMG.attr('data-player', d.user);
+
+    
   }
   $('section .votingSection').fadeIn(500);
 }
@@ -55,14 +51,7 @@ function getImage(data, imgs){
 function drawCircle( x, y, radius, color ) {
     var circle = new Path.Circle( new Point( x, y ), radius );
     circle.fillColor = color;
-    myImage = new Group();
 
-    var data = {
-        "user": uniqueID,
-        "drawing": { x: x, y: y, radius: radius, color: color }
-    }
-
-    myPicture.push(data);
 } 
 
 function clearCanvas(){
@@ -75,7 +64,11 @@ function clearCanvas(){
 // on submit drawing
 
 $('#submit').click(function(){
-    socket.emit('sendPicture', myPicture);
+    var p = project.activeLayer.rasterize();
+    var d = p.toDataURL();
+    var data = {user: uniqueID, drawing: d};
+    socket.emit('sendPicture', data);
+
     $('.draw').fadeOut(500);
     $('.wait').fadeIn(500);
     paper.view.update();
