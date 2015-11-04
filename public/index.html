@@ -52,12 +52,10 @@
       <span class="votingSection">
         <h1 id="drawingPrompt">drawing prompt</h1>
         <div class="col half" id="left">
-          <h2 class="leftplayer"></h2>
-          <canvas data-player="null" id="leftCanvas"></canvas>
+          <img data-player="" src="">
         </div>
         <div class="col half" id="right">
-          <h2 class="rightplayer"></h2>
-          <canvas data-player="null" id="rightCanvas"></canvas>
+          <img data-player="" src="">
         </div>
       </span>
     </section>
@@ -106,16 +104,16 @@
 
       // when a new player connects
 
-      socket.on('players', function(data, ips){
+      socket.on('players', function(data, ips, drawing){
         $('.playercount').html(data);
         players = data;
         startPlaying();
 
         $('#playerList').html('');
-        if(ips != []){
+        if(ips != [] && drawing != []){
           // get number of players and add them to the clientside list
           for(i = 0; i < ips.length; i++){
-            $('#playerList').append('<li id="'+ips[i][0]+'">player '+(i+1)+' : <b>'+ips[i][1]+'</b></li>');
+            $('#playerList').append('<li id="'+ips[i][0]+'+"><img src='+drawing[i].drawing+'></li>');
           }
         }
       })
@@ -177,10 +175,10 @@
 
       // this happens when you vote on a drawing
 
-      $('#rightCanvas, #leftCanvas').click(function(){
+      $('.col.half img').click(function(){
         votedFor = $(this).attr('data-player');
         socket.emit('vote', votedFor);
-        $('#rightCanvas, #leftCanvas').addClass('disabled');
+        $('.col.half img').addClass('disabled');
       })
 
       // once we get all the votes

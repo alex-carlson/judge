@@ -40,15 +40,13 @@ io.on('connection', function(socket){
   var obj = [ socket.id, 0 ];
   scores.push(obj);
   io.emit('updateScore', scores);
-  io.emit('players', allClients.length, scores);
+  io.emit('players', allClients.length, scores, drawingData);
 
   // do stuff on player disconnect
   
   socket.on('disconnect', function(){
 
     // removing all of this player's drawing stuff.
-
-    console.log(drawingData);
 
     for(i = 0; i < drawingData.length; i++){
       if(drawingData[i][0] == socket.id){
@@ -73,7 +71,7 @@ io.on('connection', function(socket){
       submittedDrawings.splice(playerToRemove, 1);
     }
 
-    io.emit('players', allClients.length, scores);
+    io.emit('players', allClients.length, scores, drawingData);
     io.emit('drawingCount', submittedDrawings);
     io.emit('updateScore', scores);
   });

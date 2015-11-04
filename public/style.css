@@ -42,15 +42,22 @@ canvas{
   float: left;
   text-align: center;
 }
-
-li b{
-  font-size: 1.2em;
-  font-weight: 100;
+.col.half img{
+  width: 100%;
+  height: 100%;
+  max-width: 45vw;
+  max-height: 45vw;
 }
 
 ul{
   list-style: none;
   padding-left: 0;
+}
+
+#playerList img{
+  max-height: 35px;
+  max-width: 35px;
+  border: solid 1px #000;
 }
 
 #drawingPrompt{
