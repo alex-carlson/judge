@@ -68,9 +68,11 @@ $('#submit').click(function(){
     var d = p.toDataURL();
     var data = {user: uniqueID, drawing: d};
     socket.emit('sendPicture', data);
+    $('.myImage img').attr('src', data.drawing);
 
     $('.draw').fadeOut(500);
     $('.wait').fadeIn(500);
+    $('.myImage').fadeIn(500);
     paper.view.update();
 })
 

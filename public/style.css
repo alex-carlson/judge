@@ -29,13 +29,12 @@ input{
 }
 canvas{
   background: #fff;
-  width: 250px;
-  height: 250px;
   border: solid 1px #ccc;
   display: inline-block;
-  max-width: 45vw;
-  max-height: 45vw;
+  width: 95vw;
+  height: 95vw;
   margin: 2.5vw;
+  box-sizing: border-box;
 }
 .col.half{
   width: 50%;
@@ -58,6 +57,15 @@ ul{
   max-height: 35px;
   max-width: 35px;
   border: solid 1px #000;
+}
+
+.myImage{
+  text-align: center;
+}
+
+.myImage img{
+  display: inline-block;
+  max-width: 25%;
 }
 
 #drawingPrompt{
