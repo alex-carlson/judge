@@ -104,30 +104,18 @@
 
       // when a new player connects
 
-      socket.on('players', function(data, ips, drawing){
+      socket.on('players', function(data){
         $('.playercount').html(data);
         players = data;
         startPlaying();
-
-        $('#playerList').html('');
-        if(ips != [] && drawing != []){
-          // get number of players and add them to the clientside list
-          for(i = 0; i < ips.length; i++){
-            $('#playerList').append('<li id="'+ips[i][0]+'+"><img src='+drawing[i].drawing+'></li>');
-          }
-        }
       })
 
       // someone submitted a vote, update the score!
 
-      socket.on('updateScore', function(data){
+      socket.on('updateScore', function(ips, drawing){
         $('#playerList').html('');
-        if(data != []){
-
-          // get all the players and list 'em out in a ul
-          for(i = 0; i < data.length; i++){
-            $('#playerList').append('<li id="'+data[i][0]+'">player '+(i+1)+' : <b>'+data[i][1]+'</b></li>');
-          }
+        for(i = 0; i < ips.length; i++){
+          $('#playerList').append('<li><img src='+drawing[i].drawing+'> - <span>'+ips[i][1]+'</span></li>');
         }
       })
 

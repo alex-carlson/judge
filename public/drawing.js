@@ -74,12 +74,16 @@ $('#submit').click(function(){
     paper.view.update();
 })
 
-socket.on('sendImageJson', function(data, images, prompt){
+socket.on('sendImageJson', function(data, images, prompt, ips){
     $('.wait').fadeOut(500);
     $('section.vote').fadeIn(500, function(){
         $('#drawingPrompt').html(prompt);
     });
     $('section .ready').fadeOut(500);
+    $('#playerList').html('');
+    for(i = 0; i < ips.length; i++){
+      $('#playerList').append('<li><img src='+data[i].drawing+'> - <span>'+ips[i][1]+'</span></li>');
+    }
     getImage(data, images);
 })
 

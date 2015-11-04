@@ -39,8 +39,8 @@ io.on('connection', function(socket){
   io.emit('drawingCount', submittedDrawings);
   var obj = [ socket.id, 0 ];
   scores.push(obj);
-  io.emit('updateScore', scores);
-  io.emit('players', allClients.length, scores, drawingData);
+  io.emit('updateScore', allClients.length, scores, drawingData);
+  io.emit('players', allClients.length);
 
   // do stuff on player disconnect
   
@@ -71,9 +71,9 @@ io.on('connection', function(socket){
       submittedDrawings.splice(playerToRemove, 1);
     }
 
-    io.emit('players', allClients.length, scores, drawingData);
+    io.emit('players', allClients.length);
     io.emit('drawingCount', submittedDrawings);
-    io.emit('updateScore', scores);
+    io.emit('updateScore', scores, drawingData);
   });
 
   socket.on( 'sendPicture', function ( data ) {
@@ -92,7 +92,7 @@ io.on('connection', function(socket){
       if(id == data){
         scores[i][1] = thisPlayerScore+1;
       }
-      io.emit('updateScore', scores);
+      io.emit('updateScore', scores, drawingData);
     }
 
     // if we have all the votes, do this.
@@ -146,7 +146,7 @@ function getDrawings(rPrompt){
 
     // do this when we have our two images
     //io.emit('imagesSelected', img1, img2);
-    io.emit('sendImageJson', drawingData, images, rPrompt);
+    io.emit('sendImageJson', drawingData, images, rPrompt, scores);
 
 }
 
