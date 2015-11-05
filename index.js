@@ -39,7 +39,7 @@ io.on('connection', function(socket){
   io.emit('drawingCount', submittedDrawings);
   var obj = [ socket.id, 0 ];
   scores.push(obj);
-  io.emit('updateScore', allClients.length, scores, drawingData);
+  io.emit('updateScore', scores, drawingData);
   io.emit('players', allClients.length);
 
   // do stuff on player disconnect
@@ -124,7 +124,7 @@ io.on('connection', function(socket){
     for(i = 0; i < scores.length; i++){
       scores[i][1] = 0;
     }
-    io.emit('updateScore', scores);
+    io.emit('updateScore', scores, drawingData);
   })
 
 });

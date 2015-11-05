@@ -119,8 +119,8 @@
 
       socket.on('updateScore', function(ips, drawing){
         $('#playerList').html('');
-        for(i = 0; i < ips.length; i++){
-          $('#playerList').append('<li><img src='+drawing[i].drawing+'> - <span>'+ips[i][1]+'</span></li>');
+        for(i = 0; i < drawing.length; i++){
+          $('#playerList').append('<li><img id="'+drawing[i].user+'" src='+drawing[i].drawing+'> - <span>'+ips[i][1]+'</span></li>');
         }
       })
 

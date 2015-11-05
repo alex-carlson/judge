@@ -38,7 +38,7 @@ function getImage(data, imgs){
     var thisIMG = $('.votingSection img:eq('+j+')');    
     $('.votingSection img:eq('+j+')').removeClass('disabled');
 
-    var d = data[imgs[j]];
+    var d = data[j];
 
     thisIMG.attr('src', d.drawing);
     thisIMG.attr('data-player', d.user);
@@ -58,6 +58,8 @@ function clearCanvas(){
 
     myPicture = [];
     project.activeLayer.removeChildren();
+
+    // this is the code to force - update the canvas.  :)
     paper.view.update();
 }
 
@@ -86,7 +88,7 @@ socket.on('sendImageJson', function(data, images, prompt, ips){
     for(i = 0; i < ips.length; i++){
       $('#playerList').append('<li><img src='+data[i].drawing+'> - <span>'+ips[i][1]+'</span></li>');
     }
-    getImage(data, images);
+    getImage(data, ips);
 })
 
 socket.on('gameOver', function(){
