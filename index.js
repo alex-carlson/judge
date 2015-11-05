@@ -6,9 +6,9 @@ var bp = require('body-parser');
 
 var submittedDrawings = [];
 var drawingData = [];
-var scores = [];
 var allClients = [];
 var votes = 0;
+var isPlaying = false;
 var votingPrompts = [
   "Best Line Quality",
   "Most Dimensionality",
@@ -33,13 +33,11 @@ app.use(bp.json()) // enable parsing of JSON files
 app.use(express.static('public')); //use express in static mode to look into the 'public' folder for files (.html, .jpg, .css, etc.)
 
 io.on('connection', function(socket){
-  socket.emit('playerID', socket.id);
+  socket.emit('playerID', socket.id, isPlaying);
   allClients.push(socket);
-  //io.emit('players', playerCount, scores);
   io.emit('drawingCount', submittedDrawings);
   var obj = [ socket.id, 0 ];
-  scores.push(obj);
-  io.emit('updateScore', scores, drawingData);
+  io.emit('updateScore', drawingData);
   io.emit('players', allClients.length);
 
   // do stuff on player disconnect
@@ -49,7 +47,7 @@ io.on('connection', function(socket){
     // removing all of this player's drawing stuff.
 
     for(i = 0; i < drawingData.length; i++){
-      if(drawingData[i][0] == socket.id){
+      if(drawingData[i].user == socket.id){
         drawingData.splice($.inArray(i, drawingData), 1);
 
       }
@@ -58,9 +56,6 @@ io.on('connection', function(socket){
     // remove this client from the game
     var i = allClients.indexOf(socket);
     allClients.splice(i, 1);
-
-    //also remove this player's score.  :(
-    scores.splice(i, 1);
 
     // decrement the submitted drawings if this player DID submit a drawing.
 
@@ -73,7 +68,7 @@ io.on('connection', function(socket){
 
     io.emit('players', allClients.length);
     io.emit('drawingCount', submittedDrawings);
-    io.emit('updateScore', scores, drawingData);
+    io.emit('updateScore', drawingData);
   });
 
   socket.on( 'sendPicture', function ( data ) {
@@ -86,24 +81,26 @@ io.on('connection', function(socket){
 
   socket.on('vote', function (data){
     votes++;
-    for(i = 0; i < scores.length; i++){
-      var id = scores[i][0];
-      var thisPlayerScore = scores[i][1];
+    for(i = 0; i < drawingData.length; i++){
+      var id = drawingData[i].user;
       if(id == data){
-        scores[i][1] = thisPlayerScore+1;
+        drawingData[i].score++;
+        io.emit('updateScore', drawingData);
       }
-      io.emit('updateScore', scores, drawingData);
     }
 
     // if we have all the votes, do this.
 
-    if(votes >= scores.length){
+    if(votes >= drawingData.length){
       io.emit('votesCast');
       votes = 0;
 
-      for(i = 0; i < scores.length; i++){
-        if(scores[i][1] >= 10){
-          io.emit('gameOver', scores[i]);
+      for(i = 0; i < drawingData.length; i++){
+
+        // change this number to adjust the score ceiling
+
+        if(drawingData[i].score >= 2){
+          io.emit('gameOver', drawingData[i]);
         } else {
           rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
           getDrawings(rPrompt);
@@ -113,18 +110,20 @@ io.on('connection', function(socket){
   })
 
   socket.on('getImage', function(){
+    isPlaying = true;
     rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
     getDrawings(rPrompt);
   })
 
   socket.on('restart', function(){
+    isPlaying = false;
     submittedDrawings = [];
     io.emit('drawingCount', submittedDrawings);
     drawingData = [];
-    for(i = 0; i < scores.length; i++){
-      scores[i][1] = 0;
+    for(i = 0; i < drawingData.length; i++){
+      drawingData[i][2] = 0;
     }
-    io.emit('updateScore', scores, drawingData);
+    io.emit('updateScore', drawingData);
   })
 
 });
@@ -146,7 +145,7 @@ function getDrawings(rPrompt){
 
     // do this when we have our two images
     //io.emit('imagesSelected', img1, img2);
-    io.emit('sendImageJson', drawingData, images, rPrompt, scores);
+    io.emit('sendImageJson', drawingData, images, rPrompt);
 
 }
 

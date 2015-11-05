@@ -6,6 +6,10 @@ var activeColor = "black";
 tool.maxDistance = 2;
 tool.minDistance = 1;
 
+var canvasSize = this.view.size;
+var rect = new Path.Rectangle( new Point( 0, 0 ), new Point(canvasSize.width, canvasSize.height) );
+rect.fillColor = 'white';
+
 $('.colors span').click(function(){
     $('.colors span').removeClass('active');
     activeColor = $(this).attr('data-color');
@@ -38,7 +42,7 @@ function getImage(data, imgs){
     var thisIMG = $('.votingSection img:eq('+j+')');    
     $('.votingSection img:eq('+j+')').removeClass('disabled');
 
-    var d = data[j];
+    var d = data[imgs[j]];
 
     thisIMG.attr('src', d.drawing);
     thisIMG.attr('data-player', d.user);
@@ -59,6 +63,10 @@ function clearCanvas(){
     myPicture = [];
     project.activeLayer.removeChildren();
 
+    var canvasSize = paper.view.size;
+    var rect = new Path.Rectangle( new Point( 0, 0 ), new Point(canvasSize.width, canvasSize.height) );
+    rect.fillColor = 'white';
+
     // this is the code to force - update the canvas.  :)
     paper.view.update();
 }
@@ -68,7 +76,7 @@ function clearCanvas(){
 $('#submit').click(function(){
     var p = project.activeLayer.rasterize();
     var d = p.toDataURL();
-    var data = {user: uniqueID, drawing: d};
+    var data = {user: uniqueID, drawing: d, score: 0};
     socket.emit('sendPicture', data);
     $('.myImage img').attr('src', data.drawing);
 
@@ -78,17 +86,21 @@ $('#submit').click(function(){
     paper.view.update();
 })
 
-socket.on('sendImageJson', function(data, images, prompt, ips){
+socket.on('sendImageJson', function(data, images, prompt){
+    // data is an array of base64 data, player id, and score.
+    // images is an array of numbers to load (ie. [1, 2], [4, 1], [99999, 1239])
+    // prompt is the random prompt from the server.
     $('.wait').fadeOut(500);
     $('section.vote').fadeIn(500, function(){
         $('#drawingPrompt').html(prompt);
     });
     $('section .ready').fadeOut(500);
     $('#playerList').html('');
-    for(i = 0; i < ips.length; i++){
-      $('#playerList').append('<li><img src='+data[i].drawing+'> - <span>'+ips[i][1]+'</span></li>');
+    for(i = 0; i < data.length; i++){
+      $('#playerList').append('<li><img src='+data[i].drawing+'> - <span>'+data[i].score+'</span></li>');
     }
-    getImage(data, ips);
+    getImage(data, images);
+    paper.view.update();
 })
 
 socket.on('gameOver', function(){

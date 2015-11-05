@@ -27,7 +27,7 @@ input{
 #brushSize{
   margin: 0;
 }
-canvas{
+canvas, .gameOver img{
   background: #fff;
   border: solid 1px #ccc;
   display: inline-block;
