@@ -142,7 +142,8 @@
         // check if the winner id belongs to this player
 
         $('.gameOver img').attr('src', data.drawing);
-      })
+          socket.emit('restart');
+        })
 
       function startPlaying(){
 
@@ -168,7 +169,6 @@
       $('.restart').click(function(){
         $('section').fadeOut(500);
         $('.welcome').fadeIn(500);
-        socket.emit('restart');
       })
 
       // this happens when you vote on a drawing

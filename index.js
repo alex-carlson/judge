@@ -44,15 +44,6 @@ io.on('connection', function(socket){
   
   socket.on('disconnect', function(){
 
-    // removing all of this player's drawing stuff.
-
-    for(i = 0; i < drawingData.length; i++){
-      if(drawingData[i].user == socket.id){
-        drawingData.splice($.inArray(i, drawingData), 1);
-
-      }
-    }
-
     // remove this client from the game
     var i = allClients.indexOf(socket);
     allClients.splice(i, 1);
@@ -64,6 +55,10 @@ io.on('connection', function(socket){
     if(submittedDrawings.indexOf(socket.id[0])){
       var playerToRemove = submittedDrawings.indexOf(socket.id);
       submittedDrawings.splice(playerToRemove, 1);
+    }
+
+    if(submittedDrawings.length == 0){
+      isPlaying = false;
     }
 
     io.emit('players', allClients.length);

@@ -14,8 +14,7 @@ body{
 
 h1{
   font-weight: 100;
-  margin: 0;
-  margin-bottom: 15px;
+  margin: 15px 0;
   text-align: center;
 }
 section{
