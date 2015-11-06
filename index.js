@@ -50,8 +50,6 @@ io.on('connection', function(socket){
 
     // decrement the submitted drawings if this player DID submit a drawing.
 
-    //console.log(submittedDrawings.indexOf(socket.id[0]))
-
     if(submittedDrawings.indexOf(socket.id[0])){
       var playerToRemove = submittedDrawings.indexOf(socket.id);
       submittedDrawings.splice(playerToRemove, 1);
@@ -102,6 +100,13 @@ io.on('connection', function(socket){
         }
       }
     }
+  })
+
+  socket.on('playerQuit', function(){
+    var i = allClients.indexOf(socket);
+    allClients.splice(i, 1);
+
+    io.emit('players', allClients.length);
   })
 
   socket.on('getImage', function(){

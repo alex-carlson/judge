@@ -71,6 +71,7 @@
       <h4>Winner:</h4>
       <img src="">
       <button class="restart">Restart</button>
+      <button class="quit">Quit</button>
     </section>
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
@@ -169,6 +170,13 @@
       $('.restart').click(function(){
         $('section').fadeOut(500);
         $('.welcome').fadeIn(500);
+      })
+
+      // quit safely function
+
+      $('.quit').click(function(){
+        $('section').fadeOut(500);
+        socket.emit('playerQuit');
       })
 
       // this happens when you vote on a drawing
