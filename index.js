@@ -38,7 +38,7 @@ io.on('connection', function(socket){
   io.emit('drawingCount', submittedDrawings);
   var obj = [ socket.id, 0 ];
   io.emit('updateScore', drawingData);
-  io.emit('players', allClients.length);
+  io.emit('players', allClients.length, isPlaying);
 
   // do stuff on player disconnect
   
@@ -59,7 +59,7 @@ io.on('connection', function(socket){
       isPlaying = false;
     }
 
-    io.emit('players', allClients.length);
+    io.emit('players', allClients.length, isPlaying);
     io.emit('drawingCount', submittedDrawings);
     io.emit('updateScore', drawingData);
   });
@@ -106,7 +106,7 @@ io.on('connection', function(socket){
     var i = allClients.indexOf(socket);
     allClients.splice(i, 1);
 
-    io.emit('players', allClients.length);
+    io.emit('players', allClients.length, isPlaying);
   })
 
   socket.on('getImage', function(){

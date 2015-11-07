@@ -1,21 +1,21 @@
 html{
   background: #fff;
-  color: #000;
-  font-family: 'Lato', sans-serif;
+  color: #111;
+  font-family: 'Oswald', sans-serif;
   font-weight: 100;
   margin: 0;
   padding: 0;
 }
 
 body{
-  padding: 0;
+  padding: 0 15px;
   margin: 0;
 }
 
-h1{
-  font-weight: 100;
+h1, h4, p{
+  /*font-weight: 100;*/
   margin: 15px 0;
-  text-align: center;
+  text-align: left;
 }
 section{
   text-align: center;
@@ -30,9 +30,9 @@ canvas, .gameOver img{
   background: #fff;
   border: solid 1px #ccc;
   display: inline-block;
-  width: 95vw;
-  height: 95vw;
-  margin: 2.5vw;
+  width: 90vw;
+  height: 90vw;
+  margin: 0;
   box-sizing: border-box;
 }
 .col.half{
@@ -58,13 +58,11 @@ ul{
   border: solid 1px #000;
 }
 
-.myImage{
-  text-align: center;
-}
-
 .myImage img{
-  display: inline-block;
   max-width: 25%;
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
 }
 
 #drawingPrompt{
@@ -73,7 +71,7 @@ ul{
 
 button{
   width: 100%;
-  height: 80px;
+  height: 50px;
   font-size: 24px;
   font-weight: 100;
   background: #eee;
@@ -151,6 +149,7 @@ button{
 
 .rangeholder{
   position: relative;
+  color: #777;
 }
 
 input[type=range] {
@@ -202,7 +201,10 @@ input[type=range]::-ms-track {
   height: 100%;
   z-index: 999;
 }
+.gameOver h1, .gameOver h4{
+  margin: 15px;
+}
 .gameOver .restart{
-  bottom: 80px;
+  bottom: 50px;
   background-color: #E6E6E6;
 }

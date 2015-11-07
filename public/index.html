@@ -3,7 +3,7 @@
   <head>
     <title>Surface</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0" />
-    <link href='https://fonts.googleapis.com/css?family=Lato:100,400,300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Oswald:400,300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="style.css">
     <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
     <!-- Load the Paper.js library -->
@@ -15,7 +15,7 @@
       <h1>Welcome to Surface.</h1>
       <p>Join the game and draw an image.  Other players will make snap judgements on your drawing based on random criteria.<br><br>
 
-      Go ahead and draw whatever your heart wants! <3</p>
+      Go ahead and draw whatever your heart wants!</p>
       <button id="join">Start</button>
     </section>
     <section id="scoreboard">
@@ -62,7 +62,6 @@
     </section>
 
     <section class="myImage">
-      <h4>My Drawing:</h4>
       <img src="">
     </section>
 
@@ -119,9 +118,18 @@
 
       // when a new player connects
 
-      socket.on('players', function(data){
+      socket.on('players', function(data, isPlaying){
         $('.playercount').html(data);
         players = data;
+
+        if(isPlaying == true){
+          $('.gameinprogress').fadeIn(500);
+          $('#submit').attr('disabled', 'disabled');
+        } else {
+          $('#submit').removeAttr('disabled');
+          $('.gameinprogress').fadeOut(500);
+        }
+
         startPlaying();
       })
 
