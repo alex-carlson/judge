@@ -30,8 +30,8 @@ canvas, .gameOver img{
   background: #fff;
   border: solid 1px #ccc;
   display: inline-block;
-  width: 90vw;
-  height: 90vw;
+  max-width: 90vw;
+  max-height: 90vw;
   margin: 0;
   box-sizing: border-box;
 }
