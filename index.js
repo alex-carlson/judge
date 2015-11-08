@@ -44,20 +44,33 @@ io.on('connection', function(socket){
   
   socket.on('disconnect', function(){
 
+    console.log(submittedDrawings.length);
+
     // remove this client from the game
     var i = allClients.indexOf(socket);
     allClients.splice(i, 1);
 
     // decrement the submitted drawings if this player DID submit a drawing.
 
-    if(submittedDrawings.indexOf(socket.id[0])){
-      var playerToRemove = submittedDrawings.indexOf(socket.id);
-      submittedDrawings.splice(playerToRemove, 1);
+    var j = submittedDrawings.indexOf(socket.id);
+
+    if(j != -1){
+      submittedDrawings.splice(j, 1);
+      console.log(submittedDrawings.length);
     }
+
+    // shutting down the game if there's nobody left with a submitted drawing.
 
     if(submittedDrawings.length == 0){
       isPlaying = false;
     }
+
+    if (allClients.length < 2){
+      io.emit('backtolobby');
+      isPlaying = false;
+    }
+
+    // sending out the updates to everyone still in.
 
     io.emit('players', allClients.length, isPlaying);
     io.emit('drawingCount', submittedDrawings);
@@ -103,10 +116,13 @@ io.on('connection', function(socket){
   })
 
   socket.on('playerQuit', function(){
-    var i = allClients.indexOf(socket);
-    allClients.splice(i, 1);
+    var j = submittedDrawings.indexOf(socket.id);
 
-    io.emit('players', allClients.length, isPlaying);
+    if(j != -1){
+      submittedDrawings.splice(j, 1);
+    }
+
+    io.emit('drawingCount', submittedDrawings);
   })
 
   socket.on('getImage', function(){

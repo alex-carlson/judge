@@ -110,7 +110,6 @@
         drawings = data.length;
 
         // on submit drawing
-        socket.emit('sendImage', data);
         startPlaying();
       })
 
@@ -128,7 +127,7 @@
           $('.gameinprogress').fadeOut(500);
         }
 
-        startPlaying();
+        //startPlaying();
       })
 
       // someone submitted a vote, update the score!
@@ -150,6 +149,11 @@
 
         $('.gameOver img').attr('src', data.drawing);
         socket.emit('restart');
+      })
+
+      socket.on('backtolobby', function(){
+        $('section').fadeOut(500);
+        $('.wait').fadeIn(500);
       })
 
       socket.on('sendImageJson', function(data, images, prompt){
