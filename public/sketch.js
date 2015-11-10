@@ -7,18 +7,20 @@ function setup(){
     myCanvas = createCanvas(350, 350);
     myCanvas.parent('draw');
     colorMode(HSB);
-    noStroke();
+    strokeWeight(radius);
+    noFill();
 }
 
 function mouseDragged(){
     x = mouseX;
     y = mouseY;
-    drawCircle(x, y, radius, activeColor);
+    drawCircle(x, y, activeColor);
 }
 
-function drawCircle( x, y, radius, color ) {
-    fill(color);
-    ellipse(x, y, radius, radius);
+function drawCircle( x, y, color ) {
+    //ellipse(x, y);
+    strokeWeight(radius);
+    line(pmouseX, pmouseY, x, y);
 } 
 
 $('.colors span').click(function(){
