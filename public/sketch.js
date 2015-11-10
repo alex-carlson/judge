@@ -20,6 +20,7 @@ function mouseDragged(){
 function drawCircle( x, y, color ) {
     //ellipse(x, y);
     strokeWeight(radius);
+    stroke(color);
     line(pmouseX, pmouseY, x, y);
 } 
 

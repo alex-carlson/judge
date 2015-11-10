@@ -44,7 +44,7 @@ io.on('connection', function(socket){
   
   socket.on('disconnect', function(){
 
-    console.log(submittedDrawings.length);
+    console.log('drawings before removal: '+submittedDrawings.length);
 
     // remove this client from the game
     var i = allClients.indexOf(socket);
@@ -56,7 +56,7 @@ io.on('connection', function(socket){
 
     if(j != -1){
       submittedDrawings.splice(j, 1);
-      console.log(submittedDrawings.length);
+      console.log('drawings after removal: '+submittedDrawings.length);
     }
 
     // shutting down the game if there's nobody left with a submitted drawing.
