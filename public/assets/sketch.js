@@ -8,6 +8,9 @@ function setup(){
     myCanvas.parent('draw');
     colorMode(HSB);
     strokeWeight(radius);
+    fill(255, 0, 255);
+    noStroke();
+    rect(0, 0, width, height);
     noFill();
 }
 
@@ -59,4 +62,9 @@ $('#submit').click(function(){
     $('.draw').fadeOut(500);
     $('.wait').fadeIn(500);
     $('.myImage').fadeIn(500);
+
+    fill(255, 0, 255);
+    noStroke();
+    rect(0, 0, width, height);
+    noFill();
 })

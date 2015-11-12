@@ -199,6 +199,7 @@
       $('.restart').click(function(){
         $('section').fadeOut(500);
         $('.welcome').fadeIn(500);
+        socket.emit('restart');
       })
 
       // quit safely function

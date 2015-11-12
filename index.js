@@ -105,6 +105,8 @@ io.on('connection', function(socket){
 
         if(drawingData[i].score >= 2){
           io.emit('gameOver', drawingData[i]);
+          submittedDrawings = [];
+          io.emit('drawingCount', submittedDrawings);
         } else {
           rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
           getDrawings(rPrompt);
@@ -131,8 +133,6 @@ io.on('connection', function(socket){
 
   socket.on('restart', function(){
     isPlaying = false;
-    submittedDrawings = [];
-    io.emit('drawingCount', submittedDrawings);
     drawingData = [];
     for(i = 0; i < drawingData.length; i++){
       drawingData[i][2] = 0;
