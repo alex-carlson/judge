@@ -56,18 +56,16 @@ io.on('connection', function(socket){
 
     if(j != -1){
       submittedDrawings.splice(j, 1);
-      console.log('drawings after removal: '+submittedDrawings.length);
     }
 
     // shutting down the game if there's nobody left with a submitted drawing.
 
-    if(submittedDrawings.length == 0){
+    if(submittedDrawings.length < 1){
       isPlaying = false;
     }
 
     if (allClients.length < 2){
       io.emit('backtolobby');
-      isPlaying = false;
     }
 
     // sending out the updates to everyone still in.
@@ -140,6 +138,7 @@ io.on('connection', function(socket){
       drawingData[i][2] = 0;
     }
     io.emit('updateScore', drawingData);
+    io.emit('playerID', socket.id, isPlaying);
   })
 
 });

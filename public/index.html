@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Surface</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0 user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0"/>
     <link rel="stylesheet" href="style.css">
     <script src="assets/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="assets/p5.js"></script>
@@ -11,7 +11,7 @@
   <body>
     <section class="welcome">
       <h1>Welcome to Surface.</h1>
-      <p>Join the game and draw an image.  Other players will make snap judgements on your drawing based on random criteria.<br><br>
+      <p>Join the game and draw an image.  Other players will make snap judgements on your drawing based on random criteria, first one to 10 points wins.<br><br>
 
       Go ahead and draw whatever your heart wants!</p>
       <button id="join">Start</button>
@@ -20,7 +20,7 @@
       <ul id="playerList"></ul>
     </section>
 
-    <section class="draw" id="draw">
+    <section class="draw">
       <h1>drawings recieved: <span class="recieved">0</span>/<span class="playercount">0</span></h1>
       <div class="rangeholder">
         <input type="range" id="brushSize" value="5" min="3" max="70">
@@ -38,6 +38,7 @@
       <div class="gameinprogress">
         <h4>Game is currently in progress, please wait until it's over to submit.</h4>
       </div>
+      <span id="draw"></span>
       <button disabled="disabled" id="submit">Submit</button>
     </section>
 
@@ -100,8 +101,6 @@
         }
       })
 
-      // the submit drawing logic is in drawing.js.  It's gross but I haven't figured out a good workaround yet...
-
       // when we get a new drawing from a player
 
       socket.on('drawingCount', function(data){
@@ -152,7 +151,7 @@
 
       socket.on('backtolobby', function(){
         $('section').fadeOut(500);
-        $('.wait').fadeIn(500);
+        $('.welcome').fadeIn(500);
       })
 
       socket.on('sendImageJson', function(data, images, prompt){

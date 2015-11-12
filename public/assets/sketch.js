@@ -14,16 +14,11 @@ function setup(){
 function touchMoved(){
     x = touchX;
     y = touchY;
-    drawCircle(x, y, activeColor);
+    strokeWeight(radius);
+    stroke(activeColor);
+    line(ptouchX, ptouchY, x, y);
     return false;
 }
-
-function drawCircle( x, y, color ) {
-    //ellipse(x, y);
-    strokeWeight(radius);
-    stroke(color);
-    line(ptouchX, ptouchY, x, y);
-} 
 
 $('.colors span').click(function(){
     $('.colors span').removeClass('active');
