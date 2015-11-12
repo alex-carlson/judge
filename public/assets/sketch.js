@@ -11,17 +11,18 @@ function setup(){
     noFill();
 }
 
-function mouseDragged(){
-    x = mouseX;
-    y = mouseY;
+function touchMoved(){
+    x = touchX;
+    y = touchY;
     drawCircle(x, y, activeColor);
+    return false;
 }
 
 function drawCircle( x, y, color ) {
     //ellipse(x, y);
     strokeWeight(radius);
     stroke(color);
-    line(pmouseX, pmouseY, x, y);
+    line(ptouchX, ptouchY, x, y);
 } 
 
 $('.colors span').click(function(){
