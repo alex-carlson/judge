@@ -23,16 +23,6 @@ function touchMoved(){
     return false;
 }
 
-$('.colors span').click(function(){
-    $('.colors span').removeClass('active');
-    activeColor = $(this).attr('data-color');
-    $(this).addClass('active');
-});
-
-$('#brushSize').change(function(){
-    radius = $(this).val();
-})
-
 function getImage(data, imgs){
   for(j = 0; j < imgs.length; j++){
 

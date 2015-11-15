@@ -112,16 +112,6 @@ io.on('connection', function(socket){
     }
   })
 
-  socket.on('playerQuit', function(){
-    var j = submittedDrawings.indexOf(socket.id);
-
-    if(j != -1){
-      submittedDrawings.splice(j, 1);
-    }
-
-    io.emit('drawingCount', submittedDrawings);
-  })
-
   socket.on('getImage', function(){
     isPlaying = true;
     rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];

@@ -9,15 +9,17 @@
     <script type="text/javascript" src="assets/p5.dom.js"></script>
   </head>
   <body>
+    <section class="error">
+      <h4>Oops!</h4>
+      <p>Something went wrong, I cleared the server, try again.</p>
+    </section>
     <section class="welcome">
       <h1>Welcome to Surface.</h1>
       <p><!-- Join the game and draw an image.  Other players will make snap judgements on your drawing based on random criteria, first one to 10 points wins.<br><br> -->
 
       Create a drawing that you think exhibits a wide range of characteristics.  Get judged by your friends.<br><br>
 
-      Go ahead and draw whatever your heart wants!<br><br>
-
-      Players: 1 - 1,000,000</p>
+      Players: 2 - 2,000,000</p>
       <button id="join">Start</button>
     </section>
     <section id="scoreboard">
@@ -27,17 +29,17 @@
     <section class="draw">
       <h4>drawings recieved: <span class="recieved">0</span>/<span class="playercount">0</span></h4>
       <div class="rangeholder">
-        <input type="range" id="brushSize" value="5" min="3" max="70">
+        <input type="range" id="brushSize" value="5" min="3" max="70" onchange="updateRadius(this.value)">
         <span id="smallStroke">1</span>
         <span id="bigStroke">45</span>
       </div>
       <div class="colors">
-        <span class="red" data-color="red">red</span>
-        <span class="green" data-color="green">green</span>
-        <span class="blue" data-color="blue">blue</span>
-        <span class="yellow" data-color="yellow">yellow</span>
-        <span class="black" data-color="black">black</span>
-        <span class="white" data-color="white">white</span>
+        <span class="red" data-color="red"></span>
+        <span class="green" data-color="green"></span>
+        <span class="blue" data-color="blue"></span>
+        <span class="yellow" data-color="yellow"></span>
+        <span class="black" data-color="black"></span>
+        <span class="white" data-color="white"></span>
       </div>
       <div class="gameinprogress">
         <h4>Game is currently in progress, please wait until it's over to submit.</h4>
@@ -49,7 +51,7 @@
     <section class="wait">
       <h1>waiting for drawings...</h1>
       <p>drawings recieved: <span class="recieved">0</span>/<span class="playercount">0</span></p>
-      <p class="small">Please don't refresh or quit, you'll hurt the server</p>
+      <p class="small">Please don't refresh or quit right now, it hurts the server.</p>
     </section>
 
     <section class="vote">
@@ -70,11 +72,9 @@
     </section>
 
     <section class="gameOver">
-      <h1>Game Over!</h1>
-      <h4>Winner:</h4>
+      <h4>Crowd Favorite:</h4>
       <img src="">
       <button class="restart">Restart</button>
-      <button class="quit">Quit</button>
     </section>
 
     <script src="assets/socket.io.js"></script>
@@ -196,6 +196,12 @@
           $('.vote, .votingSection').fadeOut(500);
           $('.vote, .votingSection, #scoreboard').fadeIn(500);
           socket.emit('getImage');
+        } else if (drawings > players){
+          $('.error').fadeIn(500);
+          $('section').fadeOut(500);
+          $('.welcome').fadeIn(500);
+          socket.emit('restart');
+          $('.error').fadeOut(1000);
         }
 
       }
@@ -208,13 +214,6 @@
         socket.emit('restart');
       })
 
-      // quit safely function
-
-      $('.quit').click(function(){
-        $('section').fadeOut(500);
-        socket.emit('playerQuit');
-      })
-
       // this happens when you vote on a drawing
 
       $('.col.half img').click(function(){
@@ -222,6 +221,16 @@
         socket.emit('vote', votedFor);
         $('.col.half img').addClass('disabled');
       })
+
+      $('.colors span').click(function(){
+          $('.colors span').removeClass('active');
+          activeColor = $(this).attr('data-color');
+          $(this).addClass('active');
+      });
+
+      function updateRadius(r){
+        radius = r;
+      }
 
       // once we get all the votes
 

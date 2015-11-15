@@ -10,10 +10,6 @@ html{
   font-weight: 100;
 }
 
-/*#draw{
-  display: inline-block;
-}*/
-
 body{
   padding: 0 15px;
   margin: 0;
@@ -36,7 +32,8 @@ input{
   display: inline-block;
 }
 #brushSize{
-  margin: 0;
+  /*margin: 0;*/
+  width: 70%;
 }
 canvas, .gameOver img{
   background: #fff;
@@ -121,14 +118,14 @@ button{
 
 .colors span{
   padding: 10px 0;
-  border: solid 1px;
+  border: solid 2px;
   font-weight: 300;
   float: left;
   flex: 1 1 auto;
   display: block;
 }
 .colors span.active{
-  border: solid 1px #000 !important;
+  border: solid 2px #000 !important;
   font-weight: 400;
 }
 
@@ -170,32 +167,6 @@ button{
   color: #777;
 }
 
-input[type=range] {
-  -webkit-appearance: none; /* Hides the slider so that custom slider can be made */
-  width: 100%; /* Specific width is required for Firefox. */
-  background: #F2F2F2;
-  height: 25px;
-}
-
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 25px;
-  height: 25px;
-  background: #ccc;
-}
-
-input[type=range]:focus {
-  outline: none; /* Removes the blue border. You should probably do some kind of focus styling for accessibility reasons though. */
-}
-
-input[type=range]::-ms-track {
-  width: 100%;
-  cursor: pointer;
-  background: #F2F2F2; /* Hides the slider so custom styles can be added */
-  border-color: transparent;
-  color: transparent;
-}
-
 #smallStroke{
   position: absolute;
   left: 12px;
@@ -223,6 +194,5 @@ input[type=range]::-ms-track {
   margin: 15px;
 }
 .gameOver .restart{
-  bottom: 50px;
   background-color: #E6E6E6;
 }
