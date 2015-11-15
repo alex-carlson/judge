@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>Surface</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <link rel="stylesheet" href="style.css">
     <script src="assets/jquery-2.1.4.min.js"></script>
     <script type="text/javascript" src="assets/p5.js"></script>
@@ -11,9 +11,13 @@
   <body>
     <section class="welcome">
       <h1>Welcome to Surface.</h1>
-      <p>Join the game and draw an image.  Other players will make snap judgements on your drawing based on random criteria, first one to 10 points wins.<br><br>
+      <p><!-- Join the game and draw an image.  Other players will make snap judgements on your drawing based on random criteria, first one to 10 points wins.<br><br> -->
 
-      Go ahead and draw whatever your heart wants!</p>
+      Create a drawing that you think exhibits a wide range of characteristics.  Get judged by your friends.<br><br>
+
+      Go ahead and draw whatever your heart wants!<br><br>
+
+      Players: 1 - 1,000,000</p>
       <button id="join">Start</button>
     </section>
     <section id="scoreboard">
@@ -21,7 +25,7 @@
     </section>
 
     <section class="draw">
-      <h1>drawings recieved: <span class="recieved">0</span>/<span class="playercount">0</span></h1>
+      <h4>drawings recieved: <span class="recieved">0</span>/<span class="playercount">0</span></h4>
       <div class="rangeholder">
         <input type="range" id="brushSize" value="5" min="3" max="70">
         <span id="smallStroke">1</span>
@@ -45,6 +49,7 @@
     <section class="wait">
       <h1>waiting for drawings...</h1>
       <p>drawings recieved: <span class="recieved">0</span>/<span class="playercount">0</span></p>
+      <p class="small">Please don't refresh or quit, you'll hurt the server</p>
     </section>
 
     <section class="vote">
@@ -60,6 +65,7 @@
     </section>
 
     <section class="myImage">
+    <p class="small">Your Drawing</p>
       <img src="">
     </section>
 

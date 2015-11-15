@@ -44,8 +44,6 @@ io.on('connection', function(socket){
   
   socket.on('disconnect', function(){
 
-    console.log('drawings before removal: '+submittedDrawings.length);
-
     // remove this client from the game
     var i = allClients.indexOf(socket);
     allClients.splice(i, 1);
@@ -72,7 +70,6 @@ io.on('connection', function(socket){
 
     io.emit('players', allClients.length, isPlaying);
     io.emit('drawingCount', submittedDrawings);
-    io.emit('updateScore', drawingData);
   });
 
   socket.on( 'sendPicture', function ( data ) {
@@ -103,7 +100,7 @@ io.on('connection', function(socket){
 
         // change this number to adjust the score ceiling
 
-        if(drawingData[i].score >= 2){
+        if(drawingData[i].score >= 10){
           io.emit('gameOver', drawingData[i]);
           submittedDrawings = [];
           io.emit('drawingCount', submittedDrawings);
