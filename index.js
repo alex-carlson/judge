@@ -92,7 +92,7 @@ io.on('connection', function(socket){
 
     // if we have all the votes, do this.
 
-    if(votes >= drawingData.length){
+    if(votes == drawingData.length){
       io.emit('votesCast');
       votes = 0;
 
@@ -104,9 +104,11 @@ io.on('connection', function(socket){
           io.emit('gameOver', drawingData[i]);
           submittedDrawings = [];
           io.emit('drawingCount', submittedDrawings);
+          return;
         } else {
           rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
           getDrawings(rPrompt);
+          return;
         }
       }
     }
