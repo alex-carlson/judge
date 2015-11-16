@@ -9,7 +9,6 @@ function setup(){
     myCanvas.parent('draw');
     s = myCanvas.parent('draw').size();
     resizeCanvas($('#draw').width(), $('#draw').width());
-    print($('#draw').width());
     resizeCanvas(s.width, s.height);
     colorMode(HSB);
     strokeWeight(radius);
@@ -51,7 +50,7 @@ $('#submit').click(function(){
     myCanvas.loadPixels();
     var c = myCanvas.canvas;
     var d = c.toDataURL();
-    var data = {user: uniqueID, drawing: d, score: 0};
+    var data = {user: uniqueID, points: 0, drawing: d};
     socket.emit('sendPicture', data);
     $('.myImage img').attr('src', data.drawing);
 

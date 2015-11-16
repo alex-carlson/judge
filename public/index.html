@@ -130,16 +130,25 @@
           $('#submit').removeAttr('disabled');
           $('.gameinprogress').fadeOut(500);
         }
-
-        //startPlaying();
       })
 
       // someone submitted a vote, update the score!
 
       socket.on('updateScore', function(drawing){
+
+        var d = drawing;
+
+        console.table( d );
+
+        d.sort(function(a, b) {
+            return b.points - a.points;
+        });
+
+        console.table( d );
+
         $('#playerList').html('');
         for(i = 0; i < drawing.length; i++){
-          $('#playerList').append('<li><img id="'+drawing[i].user+'" src='+drawing[i].drawing+'> - <span>'+drawing[i].score+'</span></li>');
+          $('#playerList').append('<li><img id="'+drawing[i].user+'" src='+drawing[i].drawing+'> - <span>'+drawing[i].points+'</span></li>');
         }
       })
 
@@ -171,7 +180,7 @@
           $('section .ready').fadeOut(500);
           $('#playerList').html('');
           for(i = 0; i < data.length; i++){
-            $('#playerList').append('<li><img src='+data[i].drawing+'> - <span>'+data[i].score+'</span></li>');
+            $('#playerList').append('<li><img src='+data[i].drawing+'> - <span>'+data[i].points+'</span></li>');
           }
           getImage(data, images);
       })

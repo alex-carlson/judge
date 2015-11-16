@@ -85,7 +85,7 @@ io.on('connection', function(socket){
     for(i = 0; i < drawingData.length; i++){
       var id = drawingData[i].user;
       if(id == data){
-        drawingData[i].score++;
+        drawingData[i].points++;
         io.emit('updateScore', drawingData);
       }
     }
@@ -100,7 +100,7 @@ io.on('connection', function(socket){
 
         // change this number to adjust the score ceiling
 
-        if(drawingData[i].score >= 10){
+        if(drawingData[i].points >= 10){
           io.emit('gameOver', drawingData[i]);
           submittedDrawings = [];
           io.emit('drawingCount', submittedDrawings);
