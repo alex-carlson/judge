@@ -138,17 +138,15 @@
 
         var d = drawing;
 
-        console.table( d );
-
         d.sort(function(a, b) {
             return b.points - a.points;
         });
 
-        console.table( d );
-
         $('#playerList').html('');
-        for(i = 0; i < drawing.length; i++){
-          $('#playerList').append('<li><img id="'+drawing[i].user+'" src='+drawing[i].drawing+'> - <span>'+drawing[i].points+'</span></li>');
+        for(i = 0; i < d.length; i++){
+          if(i < 5){
+            $('#playerList').append('<li><img id="'+drawing[i].user+'" src='+drawing[i].drawing+'> - <span>'+drawing[i].points+'</span></li>');
+          }
         }
       })
 
@@ -178,11 +176,19 @@
               $('#drawingPrompt').html(prompt);
           });
           $('section .ready').fadeOut(500);
+          var d = data;
+
+          d.sort(function(a, b) {
+              return b.points - a.points;
+          });
+
           $('#playerList').html('');
-          for(i = 0; i < data.length; i++){
-            $('#playerList').append('<li><img src='+data[i].drawing+'> - <span>'+data[i].points+'</span></li>');
+          for(i = 0; i < d.length; i++){
+            if(i < 5){
+              $('#playerList').append('<li><img id="'+d[i].user+'" src='+d[i].drawing+'> - <span>'+d[i].points+'</span></li>');
+            }
           }
-          getImage(data, images);
+          getImage(d, images);
       })
 
       socket.on('gameOver', function(){
