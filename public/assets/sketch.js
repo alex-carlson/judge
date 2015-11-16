@@ -2,10 +2,15 @@ var myImage;
 var activeColor = 'black';
 var radius = 15;
 var myCanvas;
+var s;
 
 function setup(){
-    myCanvas = createCanvas(windowWidth, windowWidth);
+    myCanvas = createCanvas($('#draw').width(), $('#draw').width());
     myCanvas.parent('draw');
+    s = myCanvas.parent('draw').size();
+    resizeCanvas($('#draw').width(), $('#draw').width());
+    print($('#draw').width());
+    resizeCanvas(s.width, s.height);
     colorMode(HSB);
     strokeWeight(radius);
     fill(255, 0, 255);
@@ -14,13 +19,14 @@ function setup(){
     noFill();
 }
 
+function touchStart(){
+    resizeCanvas($('#draw').width(), $('#draw').width());
+}
+
 function touchMoved(){
-    x = touchX;
-    y = touchY;
     strokeWeight(radius);
     stroke(activeColor);
-    line(ptouchX, ptouchY, x, y);
-    return false;
+    line(ptouchX, ptouchY, touchX, touchY);
 }
 
 function getImage(data, imgs){

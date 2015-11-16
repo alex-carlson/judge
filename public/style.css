@@ -14,6 +14,8 @@ body{
   padding: 0 15px;
   margin: 0;
   display: inline-block;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 h1, h4, p{
@@ -35,7 +37,7 @@ input{
   /*margin: 0;*/
   width: 70%;
 }
-canvas, .gameOver img{
+.gameOver img{
   background: #fff;
   border: solid 1px #ccc;
   display: inline-block;
@@ -75,6 +77,10 @@ ul{
   text-align: center;
 }
 
+canvas{
+  border: solid 1px #000;
+}
+
 .myImage p{
   text-align: center;
 }
@@ -85,6 +91,11 @@ ul{
 
 #drawingPrompt{
   text-align: center;
+}
+
+#draw{
+  width: 100%;
+  display: inline-block;
 }
 
 button{
