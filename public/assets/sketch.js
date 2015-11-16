@@ -4,7 +4,7 @@ var radius = 15;
 var myCanvas;
 
 function setup(){
-    myCanvas = createCanvas(350, 350);
+    myCanvas = createCanvas(windowWidth, windowWidth);
     myCanvas.parent('draw');
     colorMode(HSB);
     strokeWeight(radius);

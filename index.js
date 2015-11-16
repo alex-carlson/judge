@@ -108,7 +108,6 @@ io.on('connection', function(socket){
         } else {
           rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
           getDrawings(rPrompt);
-          return;
         }
       }
     }
