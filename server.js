@@ -150,6 +150,6 @@ function getDrawings(rPrompt){
     io.emit('players', allClients.length, isPlaying);
 }
 
-http.listen(3000, function(){
+http.listen(process.env.PORT || 3000, function(){
   console.log('listening on localhost:3000');
 });
