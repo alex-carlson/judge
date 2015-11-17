@@ -60,6 +60,7 @@ io.on('connection', function(socket){
 
     if(submittedDrawings.length < 1){
       isPlaying = false;
+      io.emit('players', allClients.length, isPlaying);
     }
 
     if (allClients.length < 2){
@@ -123,7 +124,7 @@ io.on('connection', function(socket){
     submittedDrawings = [];
     io.emit('updateScore', drawingData);
     io.emit('drawingCount', submittedDrawings);
-    io.emit('playerID', socket.id, isPlaying);
+    io.emit('players', allClients.length, isPlaying);
   })
 
 });
@@ -146,7 +147,7 @@ function getDrawings(rPrompt){
     // do this when we have our two images
     //io.emit('imagesSelected', img1, img2);
     io.emit('sendImageJson', drawingData, images, rPrompt);
-
+    io.emit('players', allClients.length, isPlaying);
 }
 
 http.listen(3000, function(){

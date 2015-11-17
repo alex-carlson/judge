@@ -169,9 +169,13 @@
           // images is an array of numbers to load (ie. [1, 2], [4, 1], [99999, 1239])
           // prompt is the random prompt from the server.
           $('.wait').fadeOut(500);
+         if($('.gameOver').is(':visible')){
+
+         } else {
           $('section.vote').fadeIn(500, function(){
-              $('#drawingPrompt').html(prompt);
+            $('#drawingPrompt').html(prompt);
           });
+         }
           $('section .ready').fadeOut(500);
           var d = data;
 
@@ -191,6 +195,7 @@
       socket.on('gameOver', function(data){
         fill(255, 0, 255);
         rect(0, 0, width, height);
+        $('.vote').fadeOut(500);
       })
 
       function startPlaying(){
@@ -205,7 +210,6 @@
 
         if(drawings == players && players >= 2){
           $('.wait').fadeOut(500);
-          $('.vote, .votingSection').fadeOut(500);
           $('.vote, .votingSection, #scoreboard').fadeIn(500);
           socket.emit('getImage');
         }
@@ -227,7 +231,6 @@
 
           
         }
-        $('section .votingSection').fadeIn(500);
       }
 
       // restart button logic
