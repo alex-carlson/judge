@@ -9,10 +9,6 @@
     <script type="text/javascript" src="assets/p5.dom.js"></script>
   </head>
   <body>
-    <section class="error">
-      <h4>Oops!</h4>
-      <p>Something went wrong, I cleared the server, try again.</p>
-    </section>
     <section class="welcome">
       <h1>Welcome to Surface.</h1>
       <p><!-- Join the game and draw an image.  Other players will make snap judgements on your drawing based on random criteria, first one to 10 points wins.<br><br> -->
@@ -107,16 +103,6 @@
         }
       })
 
-      // when we get a new drawing from a player
-
-      socket.on('drawingCount', function(data){
-        $('.recieved').html(data.length);
-        drawings = data.length;
-
-        // on submit drawing
-        startPlaying();
-      })
-
       // when a new player connects
 
       socket.on('players', function(data, isPlaying){
@@ -132,6 +118,16 @@
         }
       })
 
+      // when we get a new drawing from a player
+
+      socket.on('drawingCount', function(data){
+        $('.recieved').html(data.length);
+        drawings = data.length;
+
+        // on submit drawing
+        startPlaying();
+      })
+
       // someone submitted a vote, update the score!
 
       socket.on('updateScore', function(drawing){
@@ -144,7 +140,7 @@
 
         $('#playerList').html('');
         for(i = 0; i < d.length; i++){
-          if(i < 5){
+          if(i < 3){
             $('#playerList').append('<li><img id="'+drawing[i].user+'" src='+drawing[i].drawing+'> - <span>'+drawing[i].points+'</span></li>');
           }
         }
@@ -155,11 +151,12 @@
       socket.on('gameOver', function(data){
         $('section').fadeOut(500);
         $('.gameOver').fadeIn(500);
+        drawings = "";
+        players = 0;
 
         // check if the winner id belongs to this player
 
         $('.gameOver img').attr('src', data.drawing);
-        socket.emit('restart');
       })
 
       socket.on('backtolobby', function(){
@@ -184,14 +181,14 @@
 
           $('#playerList').html('');
           for(i = 0; i < d.length; i++){
-            if(i < 5){
+            if(i < 3){
               $('#playerList').append('<li><img id="'+d[i].user+'" src='+d[i].drawing+'> - <span>'+d[i].points+'</span></li>');
             }
           }
           getImage(d, images);
       })
 
-      socket.on('gameOver', function(){
+      socket.on('gameOver', function(data){
         fill(255, 0, 255);
         rect(0, 0, width, height);
       })
@@ -211,14 +208,26 @@
           $('.vote, .votingSection').fadeOut(500);
           $('.vote, .votingSection, #scoreboard').fadeIn(500);
           socket.emit('getImage');
-        } else if (drawings > players){
-          $('.error').fadeIn(500);
-          $('section').fadeOut(500);
-          $('.welcome').fadeIn(500);
-          socket.emit('restart');
-          $('.error').fadeOut(1000);
         }
 
+      }
+
+      // load in images logic
+
+      function getImage(data, imgs){
+        for(j = 0; j < imgs.length; j++){
+
+          var thisIMG = $('.votingSection img:eq('+j+')');    
+          $('.votingSection img:eq('+j+')').removeClass('disabled');
+
+          var d = data[imgs[j]];
+
+          thisIMG.attr('src', d.drawing);
+          thisIMG.attr('data-player', d.user);
+
+          
+        }
+        $('section .votingSection').fadeIn(500);
       }
 
       // restart button logic

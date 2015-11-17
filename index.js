@@ -72,12 +72,6 @@ io.on('connection', function(socket){
     io.emit('drawingCount', submittedDrawings);
   });
 
-  socket.on( 'sendPicture', function ( data ) {
-    submittedDrawings.push(socket.id);
-    drawingData.push(data);
-    io.emit('drawingCount', submittedDrawings);
-  })
-
   // when we get a vote
 
   socket.on('vote', function (data){
@@ -100,10 +94,8 @@ io.on('connection', function(socket){
 
         // change this number to adjust the score ceiling
 
-        if(drawingData[i].points >= 10){
+        if(drawingData[i].points >= 2){
           io.emit('gameOver', drawingData[i]);
-          submittedDrawings = [];
-          io.emit('drawingCount', submittedDrawings);
           return;
         } else {
           rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
@@ -111,6 +103,12 @@ io.on('connection', function(socket){
         }
       }
     }
+  })
+
+  socket.on( 'sendPicture', function ( data ) {
+    submittedDrawings.push(socket.id);
+    drawingData.push(data);
+    io.emit('drawingCount', submittedDrawings);
   })
 
   socket.on('getImage', function(){
@@ -122,10 +120,9 @@ io.on('connection', function(socket){
   socket.on('restart', function(){
     isPlaying = false;
     drawingData = [];
-    for(i = 0; i < drawingData.length; i++){
-      drawingData[i][2] = 0;
-    }
+    submittedDrawings = [];
     io.emit('updateScore', drawingData);
+    io.emit('drawingCount', submittedDrawings);
     io.emit('playerID', socket.id, isPlaying);
   })
 

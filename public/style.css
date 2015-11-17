@@ -63,6 +63,15 @@ ul{
   padding-left: 0;
 }
 
+li{
+  display: inline-block;
+  padding: 5px;
+}
+
+li > *{
+  vertical-align: middle;
+}
+
 #playerList img{
   max-height: 35px;
   max-width: 35px;
