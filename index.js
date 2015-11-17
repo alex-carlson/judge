@@ -33,7 +33,7 @@ app.use(bp.json()) // enable parsing of JSON files
 app.use(express.static('public')); //use express in static mode to look into the 'public' folder for files (.html, .jpg, .css, etc.)
 
 io.on('connection', function(socket){
-  socket.emit('playerID', socket.id, isPlaying);
+  socket.emit('playerID', socket.id, isPlaying, votingPrompts);
   allClients.push(socket);
   io.emit('drawingCount', submittedDrawings);
   var obj = [ socket.id, 0 ];
@@ -95,7 +95,7 @@ io.on('connection', function(socket){
 
         // change this number to adjust the score ceiling
 
-        if(drawingData[i].points >= 2){
+        if(drawingData[i].points >= (allClients.length * 3)){
           io.emit('gameOver', drawingData[i]);
           return;
         } else {

@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Surface</title>
+    <title>Vanity</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <link rel="stylesheet" href="style.css">
     <script src="assets/jquery-2.1.4.min.js"></script>
@@ -10,20 +10,22 @@
   </head>
   <body>
     <section class="welcome">
-      <h1>Welcome to Surface.</h1>
+      <h1>Welcome to Vanity.</h1>
       <p><!-- Join the game and draw an image.  Other players will make snap judgements on your drawing based on random criteria, first one to 10 points wins.<br><br> -->
 
-      Create a drawing that you think exhibits a wide range of characteristics.  Get judged by your friends.<br><br>
+      Create a drawing that you think exhibits a wide range of characteristics, then get judged by your friends.<br><br>
 
       Players: 2 - 2,000,000</p>
       <button id="join">Start</button>
     </section>
     <section id="scoreboard">
+    <h4>Score to win: <span id="scoretowin">0</span></h4>
       <ul id="playerList"></ul>
     </section>
 
     <section class="draw">
       <h4>drawings recieved: <span class="recieved">0</span>/<span class="playercount">0</span></h4>
+      <h6 id="promp"></h6>
       <div class="rangeholder">
         <input type="range" id="brushSize" value="5" min="3" max="70" onchange="updateRadius(this.value)">
         <span id="smallStroke">1</span>
@@ -79,6 +81,18 @@
       var socket = io();
       var players, drawings, uniqueID;
       var votedFor;
+      var pts = [];
+      var q = 0;
+
+      setInterval(function(){
+        q++;
+
+        if(q > pts.length){
+          q = 0;
+        }
+
+        $('#promp').html(pts[q]);
+      }, 3000);
 
       // load game
 
@@ -92,7 +106,8 @@
         $('.draw').fadeIn(500);
       })
 
-      socket.on('playerID', function(data, isPlaying){
+      socket.on('playerID', function(data, isPlaying, prompts){
+        pts = prompts;
         uniqueID = data;
         if(isPlaying == true){
           $('.gameinprogress').fadeIn(500);
@@ -144,6 +159,7 @@
             $('#playerList').append('<li><img id="'+drawing[i].user+'" src='+drawing[i].drawing+'> - <span>'+drawing[i].points+'</span></li>');
           }
         }
+        $('#scoretowin').html(drawing.length*3);
       })
 
       // game over, someone got all the points!
@@ -189,6 +205,7 @@
               $('#playerList').append('<li><img id="'+d[i].user+'" src='+d[i].drawing+'> - <span>'+d[i].points+'</span></li>');
             }
           }
+          $('#scoretowin').html(d.length*3);
           getImage(d, images);
       })
 
