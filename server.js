@@ -142,7 +142,7 @@ io.on('connection', function(socket){
 
     // if we have all the votes, do this.
 
-    if(votes == allClients.length){
+    if(votes == drawingData.length){
 
       for(i = 0; i < drawingData.length; i++){
 
@@ -152,11 +152,10 @@ io.on('connection', function(socket){
           io.emit('gameOver', drawingData[i]);
           restart();
           return;
-        } else {
-          rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
-          getDrawings(rPrompt);
         }
       }
+      rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
+      getDrawings(rPrompt);
     }
   })
 

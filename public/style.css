@@ -88,7 +88,8 @@ li > *{
 }
 
 .myImage{
-  max-width: 25%;
+  width: 25%;
+  max-width: 200px;
   position: absolute;
   bottom: 15px;
   left: 15px;
@@ -237,5 +238,9 @@ button{
   }
   button{
     max-width: 500px;
+  }
+  section{
+    max-width: 900px;
+    margin: 0 auto;
   }
 }
