@@ -105,6 +105,10 @@
         $('.draw').fadeIn(500);
       })
 
+      socket.on('logoff' , function(){
+        alert('times out (2 minutes)');
+      })
+
       socket.on('playerID', function(data, isPlaying, prompts){
         pts = prompts;
         uniqueID = data;
