@@ -30,17 +30,32 @@ var votingPrompts = [
 ];
 var rPrompt = 0;
 
-app.use(bp.urlencoded({ extended:false })) //some garbage to enable parsing of the body
-app.use(bp.json()) // enable parsing of JSON files
-app.use(express.static('public')); //use express in static mode to look into the 'public' folder for files (.html, .jpg, .css, etc.)
+app.use(bp.urlencoded({ extended:false }))
+app.use(bp.json())
+app.use(express.static('public'));
 
 io.on('connection', function(socket){
+  var timer = 0;
   socket.emit('playerID', socket.id, isPlaying, votingPrompts);
   allClients.push(socket);
   io.emit('drawingCount', submittedDrawings);
   var obj = [ socket.id, 0 ];
   io.emit('updateScore', drawingData);
   io.emit('players', allClients.length, isPlaying);
+
+  // timeout function
+
+  setInterval(function(){
+
+    if(timer == 10){
+      console.log('DISCONNECTING');
+      socket.disconnect();
+      timer++;
+    } else if(timer < 10){
+      timer++;
+      console.log(timer);
+    }
+  }, 1000);
 
   // do stuff on player disconnect
   
@@ -78,6 +93,8 @@ io.on('connection', function(socket){
     io.emit('players', allClients.length, isPlaying);
     io.emit('drawingCount', submittedDrawings);
   });
+
+
 
   // when we get a vote
 
