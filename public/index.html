@@ -11,9 +11,7 @@
   <body>
     <section class="welcome">
       <h1>Welcome to Vanity.</h1>
-      <p><!-- Join the game and draw an image.  Other players will make snap judgements on your drawing based on random criteria, first one to 10 points wins.<br><br> -->
-
-      Create a drawing that you think exhibits a wide range of characteristics, then get judged by your friends.<br><br>
+      <p>Create a drawing that you think exhibits a wide range of characteristics, then get judged by your friends.<br><br>
 
       Players: 2 - 2,000,000<br><br>
 
@@ -109,7 +107,7 @@
         alert('You have been disconnected from Vanity for being idle.  Please refresh to rejoin the game.');
       })
 
-      socket.on('playerID', function(data, isPlaying, prompts){
+      socket.on('playerID', function(data, prompts){
         pts = prompts;
         uniqueID = data;
       })
@@ -126,9 +124,6 @@
       socket.on('drawingCount', function(data){
         $('.recieved').html(data.length);
         drawings = data.length;
-
-        // on submit drawing
-        startPlaying();
       })
 
       // someone submitted a vote, update the score!
@@ -169,32 +164,20 @@
       })
 
       socket.on('sendImageJson', function(data, images, prompt){
+
           // data is an array of base64 data, player id, and score.
           // images is an array of numbers to load (ie. [1, 2], [4, 1], [99999, 1239])
           // prompt is the random prompt from the server.
+
           $('.wait').fadeOut(500);
-         if($('.gameOver').is(':visible')){
+          if($('.gameOver').is(':visible')){
 
-         } else {
-          $('section.vote').fadeIn(500, function(){
-            $('#drawingPrompt').html(prompt);
-          });
-         }
-          $('section .ready').fadeOut(500);
-          var d = data;
-
-          d.sort(function(a, b) {
-              return b.points - a.points;
-          });
-
-          $('#playerList').html('');
-          for(i = 0; i < d.length; i++){
-            if(i < 3){
-              $('#playerList').append('<li><img id="'+d[i].user+'" src='+d[i].drawing+'> - <span>'+d[i].points+'</span></li>');
-            }
+          } else {
+            $('section.vote').fadeIn(500, function(){
+              $('#drawingPrompt').html(prompt);
+              getImage(data, images);
+            });
           }
-          $('#scoretowin').html(d.length*3);
-          getImage(d, images);
       })
 
       socket.on('gameOver', function(data){
@@ -203,35 +186,33 @@
         $('.vote').fadeOut(500);
       })
 
-      function startPlaying(){
+      // load in images logic
+
+      function getImage(data, imgs){
 
         // if not enough players
 
-        if(drawings == players && players < 2){
+        if(drawings == players && players < 1){
           $('.wait h1').html('waiting for more players...');
         }
 
         //we're ready to start juding!
 
         if(drawings == players && players >= 2){
+
+          for(j = 0; j < 2; j++){
+
+            var thisIMG = $('.votingSection img:eq('+j+')');    
+            $('.votingSection img:eq('+j+')').removeClass('disabled');
+
+            thisIMG.attr('src', data[imgs[j]].drawing);
+            thisIMG.attr('data-player', data[imgs[j]].user);
+          }
+
+
           $('.wait').fadeOut(500);
           $('.vote, .votingSection, #scoreboard').fadeIn(500);
           socket.emit('getImage');
-        }
-
-      }
-
-      // load in images logic
-
-      function getImage(data, imgs){
-
-        for(j = 0; j < 2; j++){
-
-          var thisIMG = $('.votingSection img:eq('+j+')');    
-          $('.votingSection img:eq('+j+')').removeClass('disabled');
-
-          thisIMG.attr('src', data[imgs[j]].drawing);
-          thisIMG.attr('data-player', data[imgs[j]].user);
         }
       }
 
@@ -260,11 +241,30 @@
         radius = r;
       }
 
-      // once we get all the votes
+      // on submit drawing
 
-      socket.on('votesCast', function(){
-        socket.emit('getImage');
+      $('#submit').click(function(){
+        myCanvas.loadPixels();
+        var c = myCanvas.canvas;
+        var d = c.toDataURL();
+        var data = { user: uniqueID, drawing: d, points: 0 };
+        sendImage(data);
       })
+
+      function sendImage(data){
+        $('.myImage img').attr('src', data.drawing);
+
+        $('.draw').fadeOut(500);
+        $('.wait').fadeIn(500);
+        $('.myImage').fadeIn(500);
+
+        fill(255, 0, 255);
+        noStroke();
+        rect(0, 0, width, height);
+        noFill();
+
+        socket.emit('sendPicture', data);
+      }
     </script>
   </body>
 </html>

@@ -223,3 +223,19 @@ button{
 .gameOver .restart{
   background-color: #E6E6E6;
 }
+
+@media screen and (min-width: 800px) {
+  html{
+    overflow: scroll;
+  }
+  h1, h4, p{
+    text-align: center;
+  }
+  canvas{
+    max-height: 500px;
+    max-width: 500px;
+  }
+  button{
+    max-width: 500px;
+  }
+}

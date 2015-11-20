@@ -8,7 +8,6 @@ var submittedDrawings = [];
 var drawingData = [];
 var allClients = [];
 var votes = 0;
-var isPlaying = false;
 var votingPrompts = [
   "Best Line Quality",
   "Most Dimensionality",
@@ -26,7 +25,11 @@ var votingPrompts = [
   "Coldest",
   "Warmest",
   "Most Iconic",
-  "Most Symbolic"
+  "Most Symbolic",
+  "Most White Space",
+  "Most Complex",
+  "Most Natural",
+  "Most Machine-like"
 ];
 var rPrompt = 0;
 
@@ -36,18 +39,17 @@ app.use(express.static('public'));
 
 io.on('connection', function(socket){
   var timer = 0;
-  socket.emit('playerID', socket.id, isPlaying, votingPrompts);
+  socket.emit('playerID', socket.id, votingPrompts);
   allClients.push(socket);
-  io.emit('drawingCount', submittedDrawings);
   var obj = [ socket.id, 0 ];
   io.emit('updateScore', drawingData);
-  io.emit('players', allClients.length, isPlaying);
+  io.emit('players', allClients.length);
 
   // timeout function
 
   setInterval(function(){
 
-    if(timer == 60 * 2){
+    if(timer == 60 * 5){
       // remove this client from the game
       var i = allClients.indexOf(socket);
       allClients.splice(i, 1);
@@ -63,8 +65,7 @@ io.on('connection', function(socket){
       // shutting down the game if there's nobody left with a submitted drawing.
 
       if(submittedDrawings.length < 1){
-        isPlaying = false;
-        io.emit('players', allClients.length, isPlaying);
+        io.emit('players', allClients.length);
       }
 
       if (allClients.length < 2){
@@ -77,12 +78,12 @@ io.on('connection', function(socket){
 
       // sending out the updates to everyone still in.
 
-      io.emit('players', allClients.length, isPlaying);
+      io.emit('players', allClients.length);
       io.emit('drawingCount', submittedDrawings);
       socket.emit('disconnect');
       socket.disconnect();
       timer++;
-    } else if(timer < 60 * 2){
+    } else if(timer < 60 * 5){
       timer++;
     }
   }, 1000);
@@ -103,31 +104,17 @@ io.on('connection', function(socket){
       submittedDrawings.splice(j, 1);
     }
 
-    // shutting down the game if there's nobody left with a submitted drawing.
-
-    if(submittedDrawings.length < 1){
-      isPlaying = false;
-      io.emit('players', allClients.length, isPlaying);
-    }
-
-    if (allClients.length < 2){
-      io.emit('backtolobby');
-      drawingData = [];
-      submittedDrawings = [];
-      io.emit('updateScore', drawingData);
-      io.emit('drawingCount', submittedDrawings);
-    }
-
     // sending out the updates to everyone still in.
 
-    io.emit('players', allClients.length, isPlaying);
+    io.emit('players', allClients.length);
     io.emit('drawingCount', submittedDrawings);
   });
 
-  socket.onevent = function (packet) {
-    console.log('anything');
-    votes = 0;
-  };
+  // listen for all events
+
+  socket.on( '*', function onWildcard ( event ) {
+    timer = 0;
+  })
 
   // when we get a vote
 
@@ -143,11 +130,9 @@ io.on('connection', function(socket){
 
     // if we have all the votes, do this.
 
-    if(votes == allClients.length){
+    if(votes == drawingData.length){
 
       for(i = 0; i < drawingData.length; i++){
-
-        // change this number to adjust the score ceiling
 
         if(drawingData[i].points >= (allClients.length * 3)){
           io.emit('gameOver', drawingData[i]);
@@ -164,7 +149,8 @@ io.on('connection', function(socket){
   socket.on( 'sendPicture', function ( data ) {
     submittedDrawings.push(socket.id);
     drawingData.push(data);
-    io.emit('drawingCount', submittedDrawings);
+    rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
+    getDrawings(rPrompt);
   })
 
   socket.on('getImage', function(){
@@ -175,12 +161,24 @@ io.on('connection', function(socket){
 
 });
 
+function getDrawings(rPrompt){
+    
+  // only getting 2 images
+
+  var imgnums = getNumbers();
+
+  // do this when we have our two images
+
+  io.emit('players', allClients.length);
+  io.emit('sendImageJson', drawingData, imgnums, rPrompt);
+}
+
 function restart(){
-    drawingData = [];
-    submittedDrawings = [];
-    io.emit('updateScore', drawingData);
-    io.emit('drawingCount', submittedDrawings);
-    io.emit('players', allClients.length, isPlaying);
+  drawingData = [];
+  submittedDrawings = [];
+  io.emit('updateScore', drawingData);
+  io.emit('drawingCount', submittedDrawings);
+  io.emit('players', allClients.length);
 }
 
 function getNumbers(){
@@ -194,18 +192,6 @@ function getNumbers(){
     if(!found)arr[arr.length]=randomnumber;
   }
   return(arr);
-}
-
-function getDrawings(rPrompt){
-  // only getting 2 images
-
-
-    var imgnums = getNumbers();
-
-    // do this when we have our two images
-
-    io.emit('sendImageJson', drawingData, imgnums, rPrompt);
-    io.emit('players', allClients.length, isPlaying);
 }
 
 http.listen(process.env.PORT || 3000, function(){
