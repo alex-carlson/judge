@@ -22,6 +22,12 @@ function touchStart(){
     resizeCanvas($('#draw').width(), $('#draw').width());
 }
 
+function mouseDragged(){
+  strokeWeight(radius);
+  stroke(activeColor);
+  line(pmouseX, pmouseY, mouseX, mouseY);
+}
+
 function touchMoved(){
     strokeWeight(radius);
     stroke(activeColor);

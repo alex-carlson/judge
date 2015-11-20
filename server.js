@@ -124,10 +124,9 @@ io.on('connection', function(socket){
     io.emit('drawingCount', submittedDrawings);
   });
 
-  socket.onevent = function (packet) {
-    console.log('anything');
-    votes = 0;
-  };
+  socket.on( '*', function onWildcard ( event ) {
+    timer = 0;
+  })
 
   // when we get a vote
 
