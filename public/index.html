@@ -41,17 +41,13 @@
         <span class="black" data-color="black"></span>
         <span class="white" data-color="white"></span>
       </div>
-      <div class="gameinprogress">
-        <h4>Game is currently in progress, please wait until it's over to submit.</h4>
-      </div>
       <span id="draw"></span>
-      <button disabled="disabled" id="submit">Submit</button>
+      <button id="submit">Submit</button>
     </section>
 
     <section class="wait">
       <h1>waiting for drawings...</h1>
       <p>drawings recieved: <span class="recieved">0</span>/<span class="playercount">0</span></p>
-      <p class="small">Please don't refresh or quit right now, it hurts the server.</p>
     </section>
 
     <section class="vote">
@@ -111,28 +107,13 @@
       socket.on('playerID', function(data, isPlaying, prompts){
         pts = prompts;
         uniqueID = data;
-        if(isPlaying == true){
-          $('.gameinprogress').fadeIn(500);
-          $('#submit').attr('disabled', 'disabled');
-        } else {
-          $('#submit').removeAttr('disabled');
-          $('.gameinprogress').fadeOut(500);
-        }
       })
 
       // when a new player connects
 
-      socket.on('players', function(data, isPlaying){
+      socket.on('players', function(data){
         $('.playercount').html(data);
         players = data;
-
-        if(isPlaying == true){
-          $('.gameinprogress').fadeIn(500);
-          $('#submit').attr('disabled', 'disabled');
-        } else {
-          $('#submit').removeAttr('disabled');
-          $('.gameinprogress').fadeOut(500);
-        }
       })
 
       // when we get a new drawing from a player
@@ -238,17 +219,14 @@
       // load in images logic
 
       function getImage(data, imgs){
-        for(j = 0; j < imgs.length; j++){
+
+        for(j = 0; j < 2; j++){
 
           var thisIMG = $('.votingSection img:eq('+j+')');    
           $('.votingSection img:eq('+j+')').removeClass('disabled');
 
-          var d = data[imgs[j]];
-
-          thisIMG.attr('src', d.drawing);
-          thisIMG.attr('data-player', d.user);
-
-          
+          thisIMG.attr('src', data[imgs[j]].drawing);
+          thisIMG.attr('data-player', data[imgs[j]].user);
         }
       }
 
@@ -257,7 +235,6 @@
       $('.restart').click(function(){
         $('section').fadeOut(500);
         $('.welcome').fadeIn(500);
-        socket.emit('restart');
       })
 
       // this happens when you vote on a drawing
@@ -281,7 +258,7 @@
       // once we get all the votes
 
       socket.on('votesCast', function(){
-        startPlaying();
+        socket.emit('getImage');
       })
     </script>
   </body>

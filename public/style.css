@@ -8,6 +8,7 @@ html{
   color: #111;
   font-family: 'Oswald', sans-serif;
   font-weight: 100;
+  overflow: hidden;
 }
 
 body{

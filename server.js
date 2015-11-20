@@ -24,7 +24,9 @@ var votingPrompts = [
   "Most Grand",
   "Smallest",
   "Coldest",
-  "Warmest"
+  "Warmest",
+  "Most Iconic",
+  "Most Symbolic"
 ];
 var rPrompt = 0;
 
@@ -65,6 +67,10 @@ io.on('connection', function(socket){
 
     if (allClients.length < 2){
       io.emit('backtolobby');
+      drawingData = [];
+      submittedDrawings = [];
+      io.emit('updateScore', drawingData);
+      io.emit('drawingCount', submittedDrawings);
     }
 
     // sending out the updates to everyone still in.
@@ -81,14 +87,13 @@ io.on('connection', function(socket){
       var id = drawingData[i].user;
       if(id == data){
         drawingData[i].points++;
-        io.emit('updateScore', drawingData);
       }
     }
+    io.emit('updateScore', drawingData);
 
     // if we have all the votes, do this.
 
     if(votes == drawingData.length){
-      io.emit('votesCast');
       votes = 0;
 
       for(i = 0; i < drawingData.length; i++){
@@ -97,6 +102,7 @@ io.on('connection', function(socket){
 
         if(drawingData[i].points >= (allClients.length * 3)){
           io.emit('gameOver', drawingData[i]);
+          restart();
           return;
         } else {
           rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
@@ -118,35 +124,38 @@ io.on('connection', function(socket){
     getDrawings(rPrompt);
   })
 
-  socket.on('restart', function(){
-    isPlaying = false;
+});
+
+function restart(){
     drawingData = [];
     submittedDrawings = [];
     io.emit('updateScore', drawingData);
     io.emit('drawingCount', submittedDrawings);
     io.emit('players', allClients.length, isPlaying);
-  })
+}
 
-});
+function getNumbers(){
+  var arr = [];
+  while(arr.length < 2){
+    var randomnumber=Math.ceil(Math.random()*submittedDrawings.length-1)
+    var found=false;
+    for(var i=0;i<arr.length;i++){
+    if(arr[i]==randomnumber){found=true;break}
+    }
+    if(!found)arr[arr.length]=randomnumber;
+  }
+  return(arr);
+}
 
 function getDrawings(rPrompt){
   // only getting 2 images
 
-  var img1 = Math.floor((Math.random() * submittedDrawings.length));
-  var img2 = Math.floor((Math.random() * submittedDrawings.length));
 
-
-  // make sure we get 2 different images;
-
-  while (img1 == img2){
-    img2 = Math.floor((Math.random() * submittedDrawings.length));
-  }
-
-    var images = [img1, img2];
+    var imgnums = getNumbers();
 
     // do this when we have our two images
-    //io.emit('imagesSelected', img1, img2);
-    io.emit('sendImageJson', drawingData, images, rPrompt);
+
+    io.emit('sendImageJson', drawingData, imgnums, rPrompt);
     io.emit('players', allClients.length, isPlaying);
 }
 
