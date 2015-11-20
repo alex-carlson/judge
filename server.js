@@ -47,7 +47,7 @@ io.on('connection', function(socket){
 
   setInterval(function(){
 
-    if(timer == 3000){
+    if(timer == 60 * 2){
       // remove this client from the game
       var i = allClients.indexOf(socket);
       allClients.splice(i, 1);
@@ -82,7 +82,7 @@ io.on('connection', function(socket){
       socket.emit('disconnect');
       socket.disconnect();
       timer++;
-    } else if(timer < 3000){
+    } else if(timer < 60 * 2){
       timer++;
     }
   }, 1000);
