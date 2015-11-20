@@ -103,17 +103,8 @@ io.on('connection', function(socket){
       submittedDrawings.splice(j, 1);
     }
 
-    // shutting down the game if there's nobody left with a submitted drawing.
-
-    if(submittedDrawings.length < 1){
-      isPlaying = false;
-      io.emit('players', allClients.length, isPlaying);
-    }
-
     if (allClients.length < 2){
       io.emit('backtolobby');
-      drawingData = [];
-      submittedDrawings = [];
       io.emit('updateScore', drawingData);
       io.emit('drawingCount', submittedDrawings);
     }
@@ -142,7 +133,7 @@ io.on('connection', function(socket){
 
     // if we have all the votes, do this.
 
-    if(votes == drawingData.length){
+    if(votes == allClients.length){
 
       for(i = 0; i < drawingData.length; i++){
 
@@ -150,12 +141,18 @@ io.on('connection', function(socket){
 
         if(drawingData[i].points >= (allClients.length * 3)){
           io.emit('gameOver', drawingData[i]);
+          console.log('game over!');
           restart();
           return;
+        } else {
+          votes = 0;
+
+          if(i = drawingData.length){
+            rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
+            getDrawings(rPrompt);
+          }
         }
       }
-      rPrompt = votingPrompts[Math.floor(Math.random() * votingPrompts.length)];
-      getDrawings(rPrompt);
     }
   })
 
