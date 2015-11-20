@@ -28,8 +28,22 @@ function touchMoved(){
     line(ptouchX, ptouchY, touchX, touchY);
 }
 
-function mouseDragged(){
-    strokeWeight(radius);
-    stroke(activeColor);
-    line(pmouseX, pmouseY, mouseX, mouseY);
-}
+// on submit drawing
+
+$('#submit').click(function(){
+  myCanvas.loadPixels();
+  var c = myCanvas.canvas;
+  var d = c.toDataURL();
+  var data = {user: uniqueID, points: 0, drawing: d};
+  socket.emit('sendPicture', data);
+  $('.myImage img').attr('src', data.drawing);
+
+  $('.draw').fadeOut(500);
+  $('.wait').fadeIn(500);
+  $('.myImage').fadeIn(500);
+
+  fill(255, 0, 255);
+  noStroke();
+  rect(0, 0, width, height);
+  noFill();
+})
