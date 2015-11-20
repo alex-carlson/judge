@@ -84,7 +84,6 @@ io.on('connection', function(socket){
       timer++;
     } else if(timer < 3000){
       timer++;
-      console.log(timer);
     }
   }, 1000);
 
@@ -125,7 +124,10 @@ io.on('connection', function(socket){
     io.emit('drawingCount', submittedDrawings);
   });
 
-
+  socket.onevent = function (packet) {
+    console.log('anything');
+    votes = 0;
+  };
 
   // when we get a vote
 
@@ -142,7 +144,6 @@ io.on('connection', function(socket){
     // if we have all the votes, do this.
 
     if(votes == allClients.length){
-      votes = 0;
 
       for(i = 0; i < drawingData.length; i++){
 
