@@ -37,9 +37,9 @@ app.use(express.static('public'));
 io.on('connection', function(socket){
   var timer = 0;
   socket.emit('playerID', socket.id, isPlaying, votingPrompts);
-  allClients.push(socket);
   io.emit('drawingCount', submittedDrawings);
   var obj = [ socket.id, 0 ];
+  allClients.push(socket);
   io.emit('updateScore', drawingData);
   io.emit('players', allClients.length, isPlaying);
 
@@ -139,9 +139,8 @@ io.on('connection', function(socket){
 
         // change this number to adjust the score ceiling
 
-        if(drawingData[i].points >= (allClients.length * 3)){
+        if(drawingData[i].points >= (drawingData.length * 3)){
           io.emit('gameOver', drawingData[i]);
-          console.log('game over!');
           restart();
           return;
         } else {

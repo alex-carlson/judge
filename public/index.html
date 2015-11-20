@@ -101,6 +101,7 @@
       // join the game
 
       $('#join').click(function(){
+        socket.emit('joined');
         $('section').fadeOut(500);
         $('.draw').fadeIn(500);
       })
@@ -116,7 +117,7 @@
 
       // when a new player connects
 
-      socket.on('players', function(data){
+      socket.on('players', function(data, isPlaying){
         $('.playercount').html(data);
         players = data;
       })
