@@ -47,11 +47,42 @@ io.on('connection', function(socket){
 
   setInterval(function(){
 
-    if(timer == 10){
-      console.log('DISCONNECTING');
+    if(timer == 3000){
+      // remove this client from the game
+      var i = allClients.indexOf(socket);
+      allClients.splice(i, 1);
+
+      // decrement the submitted drawings if this player DID submit a drawing.
+
+      var j = submittedDrawings.indexOf(socket.id);
+
+      if(j != -1){
+        submittedDrawings.splice(j, 1);
+      }
+
+      // shutting down the game if there's nobody left with a submitted drawing.
+
+      if(submittedDrawings.length < 1){
+        isPlaying = false;
+        io.emit('players', allClients.length, isPlaying);
+      }
+
+      if (allClients.length < 2){
+        io.emit('backtolobby');
+        drawingData = [];
+        submittedDrawings = [];
+        io.emit('updateScore', drawingData);
+        io.emit('drawingCount', submittedDrawings);
+      }
+
+      // sending out the updates to everyone still in.
+
+      io.emit('players', allClients.length, isPlaying);
+      io.emit('drawingCount', submittedDrawings);
+      socket.emit('disconnect');
       socket.disconnect();
       timer++;
-    } else if(timer < 10){
+    } else if(timer < 3000){
       timer++;
       console.log(timer);
     }
