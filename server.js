@@ -141,7 +141,7 @@ io.on('connection', function(socket){
 
     // if we have all the votes, do this.
 
-    if(votes == drawingData.length){
+    if(votes == allClients.length){
       votes = 0;
 
       for(i = 0; i < drawingData.length; i++){
